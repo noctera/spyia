@@ -61,6 +61,6 @@ void least_significant_bit_encode(std::string image_path, std::string text) {
         }
     }
 
-    cv::imwrite("test.jpg", img);
+    cv::imwrite("output.png", img);
 }
 } // namespace steg
