@@ -7,14 +7,14 @@ using namespace cv;
 
 int main(int argc, char** argv) {
     std::string name = "";
-    for (int i = 0; i < 1000000; ++i) {
+    for (int i = 0; i < 50000; ++i) {
         name += "t";
     }
     // Starting time for the clock
     auto start = std::chrono::high_resolution_clock::now();
 
     // Simulate doing work
-    steg::least_significant_bit_encode("/home/julian/steganography/src/steno_2.png", name);
+    steg::least_significant_bit_encode("./steno_2.png", name);
 
     // Ending time for the clock
     auto stop = std::chrono::high_resolution_clock::now();

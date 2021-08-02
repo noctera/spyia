@@ -29,7 +29,6 @@ unsigned char bin_to_dec(std::string input) {
 }
 
 void least_significant_bit_encode(std::string image_path, std::string text) {
-    // std::string image_path = samples::findFile("image.jpg");
     cv::Mat img = cv::imread(image_path);
 
     // check how many pixels must be manipulated to fit the text
@@ -41,13 +40,13 @@ void least_significant_bit_encode(std::string image_path, std::string text) {
     std::vector<int> bin_converted_text = dec_to_bin(text);
     int pixel_counter = 0;
     int counter = 0;
-    for (int i = 0; i < img.cols; i++) {
-        for (int j = 0; j < img.rows; j++) {
+    for (int i = 0; i < img.rows; i++) {
+        for (int j = 0; j < img.cols; j++) {
             // if number of needed pixels is reached stop iterating
             if (pixel_counter > needed_pixels) {
                 break;
             }
-            cv::Vec3b& intensity = img.at<cv::Vec3b>(j, i);
+            cv::Vec3b& intensity = img.at<cv::Vec3b>(i, j);
             for (int k = 0; k < img.channels(); k++) {
                 std::string bin_converted_value = dec_to_bin(int(intensity.val[k]));
 
