@@ -1,5 +1,6 @@
 #include "../include/Steganography.h"
 #include <chrono>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 
@@ -13,8 +14,9 @@ int main(int argc, char** argv) {
     // Starting time for the clock
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Simulate doing work
-    steg::leastSignificantBitEncode("/home/julian/steganography/src/steno_2.png", name);
+    steg::leastSignificantBitEncode("/home/julian/steganography/src/steno_2.png", "/home/julian/steganography/src/output.png", "Guten Tag. Das hier ist aber sehr toll");
+    std::cout << steg::leastSignificantBitDecode("/home/julian/steganography/src/output.png") << std::endl;
+
 
     // Ending time for the clock
     auto stop = std::chrono::high_resolution_clock::now();

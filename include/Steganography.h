@@ -1,6 +1,8 @@
 #pragma once
 #include <bitset>
+#include <filesystem>
 #include <iostream>
+#include <map>
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
@@ -20,93 +22,135 @@ std::vector<int> textToBin(const std::string& input) {
     return bits;
 }
 
+std::vector<int> createHeader(int stringLength) {
+    std::vector<int> headerBits;
+    auto binStringLength = std::bitset<32>(stringLength);
+    // using a reversed for loop in order to get the right direction. Don't ask me why c++ is flipping the bitset when iterating over it
+    for (int ii = binStringLength.size() - 1; ii >= 0; --ii) {
+        headerBits.push_back(binStringLength[ii]);
+    }
+
+
+    return headerBits;
+}
 std::string decToBin(const int& input) {
     return std::bitset<8>(input).to_string();
 }
 
-unsigned char binToDec(std::string input) {
+unsigned char binToDec(const std::string& input) {
     return std::stoi(input, nullptr, 2);
 }
 
-char binToText(std::string input) {
-    char temp = 0;
-    for (int i = 0; i < 8; i++) {
-        if ('1' == input.at(i)) {
-            temp += pow(2, 7 - i);
-        }
-    }
-
-    return temp;
+char binToText(const std::string& input) {
+    return std::bitset<8>(input).to_ulong();
 }
 
-void leastSignificantBitEncode(std::string imagePath, std::string input) {
-    cv::Mat img = cv::imread(imagePath);
+int decodeHeader(std::string header) {
+    return binToDec(header.substr(0, 32));
+}
 
-    // check how many pixels must be manipulated to fit the text
-    int maxTextNum = input.size() * 8;
-    int neededPixels = (maxTextNum % 3 == 0) ? maxTextNum / 3 : maxTextNum / 3 + 1;
 
-    // fetch the binary numbers of the input text
-    std::vector<int> binConvertedText = textToBin(input);
-    for (auto binConv : binConvertedText) {
-        std::cout << binConv;
-    }
-    int pixelCounter = 0;
-    // counts at which bit we are
-    int counter = 0;
-    // iterate over image pixels
-    for (int i = 0; i < img.rows; i++) {
-        // if number of needed pixels is reached stop iterating
-        if (pixelCounter > neededPixels) {
-            break;
+void leastSignificantBitEncode(std::string imagePath, std::string outputPath std::string input) {
+    try {
+        cv::Mat img = cv::imread(imagePath);
+
+        // calculate maximum amount of bits to change and check if text fits into it
+        int maxImgBits = img.rows * img.cols * img.channels();
+        // check how many pixels must be manipulated to fit the text (+ 32 for the header)
+        int neededBits = input.size() * 8 + 32;
+
+        if (maxImgBits < neededBits) {
+            throw std::length_error("text does not fit in Picture");
         }
-        for (int j = 0; j < img.cols; j++) {
+
+        int bitCounter = 0;
+
+        // fetch the binary numbers of the input text
+        std::vector<int> binConvertedText = createHeader(input.length());
+        std::vector<int> binInput = textToBin(input);
+
+        binConvertedText.insert(binConvertedText.end(), binInput.begin(), binInput.end());
+
+        // iterate over image pixels
+        for (int i = 0; i < img.rows; i++) {
             // if number of needed pixels is reached stop iterating
-            if (pixelCounter > neededPixels) {
+            if (bitCounter > neededBits) {
                 break;
             }
-            // fetch RGB values of pixel
-            cv::Vec3b& intensity = img.at<cv::Vec3b>(i, j);
-            for (int k = 0; k < img.channels(); k++) {
-                // convert color value to binary number
-                std::string binConvertedValue = decToBin(int(intensity.val[k]));
+            for (int j = 0; j < img.cols; j++) {
+                // if number of needed pixels is reached stop iterating
+                if (bitCounter > neededBits) {
+                    break;
+                }
+                // fetch RGB values of pixel
+                cv::Vec3b& intensity = img.at<cv::Vec3b>(i, j);
+                for (int k = 0; k < img.channels(); k++) {
+                    if (bitCounter > neededBits) {
+                        break;
+                    }
+                    // convert color value to binary number
+                    std::string binConvertedValue = decToBin(int(intensity.val[k]));
 
-                // manipulate last bit of binary number
-                binConvertedValue.replace(7, 1, std::to_string(binConvertedText[counter]));
+                    // manipulate last bit of binary number
+                    binConvertedValue.replace(7, 1, std::to_string(binConvertedText[bitCounter]));
 
-                // change out color value
-                intensity.val[k] = binToDec(binConvertedValue);
-                ++counter;
+                    // change out color value
+                    intensity.val[k] = binToDec(binConvertedValue);
+                    ++bitCounter;
+                }
             }
-            ++pixelCounter;
         }
-    }
 
-    cv::imwrite("output.png", img);
+        cv::imwrite("/home/julian/steganography/src/output.png", img);
+    } catch (...) {
+    }
 }
 
 std::string leastSignificantBitDecode(std::string imagePath) {
     cv::Mat img = cv::imread(imagePath);
 
     int bitCounter = 0;
+    int maxConvertedBits = 0;
+    int headerCounter = 0;
+    std::string header = "";
     std::string bits = "";
     std::string fullText = "";
+    int length = 0;
 
     for (int i = 0; i < img.rows; i++) {
         for (int j = 0; j < img.cols; j++) {
+            if (maxConvertedBits > length) {
+                break;
+            }
             // if number of needed pixels is reached stop iterating
             cv::Vec3b& intensity = img.at<cv::Vec3b>(i, j);
             for (int k = 0; k < img.channels(); k++) {
+                if (maxConvertedBits > length) {
+                    break;
+                }
                 std::string binConvertedValue = decToBin(int(intensity.val[k]));
+                // as long as 37 bits are not reached store all 37 bits in a string
 
-                bits += binConvertedValue[7];
+                if (headerCounter == 32) {
+                    length = decodeHeader(header) * 8;
+                    // std::cout << "filetype: " << jasdflkasfj["filetype"] << std::endl << "colorSpace: " << jasdflkasfj["colorSpace"] << std::endl << "length: " << jasdflkasfj["length"] << std::endl;
+                    ++headerCounter;
+                }
 
-                ++bitCounter;
-                // if 8 bits were extracted convert them to a string
-                if (bitCounter == 8) {
-                    fullText += binToText(bits);
-                    bitCounter = 0;
-                    bits = "";
+                if (headerCounter < 32) {
+                    header += binConvertedValue[7];
+                    ++headerCounter;
+                } else {
+                    // when header bits are fetched extract the normal text
+                    bits += binConvertedValue[7];
+                    ++maxConvertedBits;
+                    ++bitCounter;
+                    // if 8 bits were extracted convert them to a string
+                    if (bitCounter == 8) {
+                        fullText += binToText(bits);
+                        bitCounter = 0;
+                        bits = "";
+                    }
                 }
             }
         }
