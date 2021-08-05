@@ -5,12 +5,14 @@ This is a single header "Least significant bit (LSB)" steganography lib to hide 
 ## Example
 
 ```cpp
-#include "../include/Steganography.h"
+#include <CppSteg/steganography.hpp>
 #include <iostream>
 
 int main() {
+    // hiding secret message
+    steg::leastSignificantBitEncode("/path_to_input_image/input.png", "/path_to_output_image/output.png", "My secret Message");
 
-    steg::leastSignificantBitEncode("/home/julian/steganography/src/input.png", "/home/julian/steganography/src/output.png", "My secret message");
-    std::cout << steg::leastSignificantBitDecode("/home/julian/steganography/src/output.png") << std::endl;
+    // decode message from manipulated picture
+    std::cout << steg::leastSignificantBitDecode("/path_to_manipulated_image/output.png") << std::endl;
 }
 ```
