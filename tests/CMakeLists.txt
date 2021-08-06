@@ -5,13 +5,6 @@ project(cppsteg_tests)
 include(FetchContent)
 
 CPMAddPackage("gh:catchorg/Catch2@2.5.0")
-FetchContent_Declare(
-	catch2
-	GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-	GIT_TAG        origin/v2.x
-)
-FetchContent_MakeAvailable(catch2)
-
 add_executable(
 	${PROJECT_NAME}
 	"main.cpp"
