@@ -27,24 +27,18 @@ project(CppSteg
 )
 
 find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
-
 include(CTest)
 
 option(CPPSTEG_BUILD_EXAMPLES "Enables example building" ON)
 option(CPPSTEG_BUILD_TESTS "Enables tests building" ON)
 
-# if(MSVC)
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
-#else()
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-#endif()
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
-#CPMAddPackage("gh:opencv/opencv#4.5.3")
-
 add_library(${PROJECT_NAME} INTERFACE)
 
-target_link_libraries( CppSteg INTERFACE ${OpenCV_LIBS} )
+target_link_libraries(${PROJECT_NAME} INTERFACE 
+	opencv_core
+	opencv_imgproc
+	opencv_imgcodecs
+	)
 
 target_include_directories(
 	${PROJECT_NAME}

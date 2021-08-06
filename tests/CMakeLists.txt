@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(catch2)
 add_executable(
 	${PROJECT_NAME}
 	"main.cpp"
+	"TextToBin.cpp"
 )
 
 target_link_libraries(
