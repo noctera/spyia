@@ -16,13 +16,7 @@ TEST_CASE("Check lowercase ASCII letters", "[textToBin]") {
                                                         {"y", "01111001"}, {"z", "01111010"}};
 
     for (auto const& [key, value] : letterBinaryDict) {
-        std::vector<int> tempBinVec;
-
-        for (int i = 0; i < 8; ++i) {
-            tempBinVec.push_back(value[i] - 48);
-        }
-
-        REQUIRE(steg::textToBin(key) == tempBinVec);
+        REQUIRE(steg::textToBin(key) == value);
     }
 
 }
@@ -39,13 +33,30 @@ TEST_CASE("Check upercase ASCII letters", "[textToBin]") {
                                                         {"Y", "01011001"}, {"Z", "01011010"}};
 
     for (auto const& [key, value] : letterBinaryDict) {
-        std::vector<int> tempBinVec;
+        REQUIRE(steg::textToBin(key) == value);
+    }
+}
 
-        for (int i = 0; i < 8; ++i) {
-            tempBinVec.push_back(value[i] - 48);
-        }
+/*TEST_CASE("Check special ASCII letters", "[textToBin]") {
+    std::map<std::string, std::string> letterBinaryDict{{" ", "01000001"}, {"!", "01000010"}, {"\"", "00100010"},
+                                                        {"#", "01000100"}, {"$", "01000101"}, {"%", "01000110"},
+                                                        {"&", "01000111"}, {"'", "01001000"}, {"(", "01001001"},
+                                                        {")", "01001010"}, {"*", "01001011"}, {"+", "01001100"},
+                                                        {",", "01001101"}, {"-", "01001110"}, {".", "01001111"},
+                                                        {"/", "01010000"}, {"Q", "01010001"}, {"R", "01010010"},
+                                                        {"S", "01010011"}, {"T", "01010100"}, {"U", "01010101"},
+                                                        {"V", "01010110"}, {"W", "01010111"}, {"X", "01011000"},
+                                                        {"Y", "01011001"}, {"Z", "01011010"}};
 
-        REQUIRE(steg::textToBin(key) == tempBinVec);
+    for (auto const& [key, value] : letterBinaryDict) {
+        REQUIRE(steg::textToBin(key) == value);
+    }
+}*/
+
+TEST_CASE("Extra Test Case", "[textToBin]") {
+    std::string testCase = steg::textToBin("Hello");
+    SECTION(testCase) {
+        REQUIRE(testCase == "0100100001100101011011000110110001101111");
     }
 }
     /*

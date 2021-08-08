@@ -11,37 +11,25 @@
 
 namespace steg {
 
-std::vector<int> textToBin(const std::string& input) {
-    std::vector<int> bits;
+std::string textToBin(const std::string& input) {
+    std::string bitStr = "";
 
     for (std::size_t i = 0; i < input.size(); ++i) {
-        auto convertedBits = std::bitset<8>(input[i]);
-        // using a reversed for loop in order to get the right direction. Don't ask me why c++ is flipping the bitset when iterating over it
-        for (int ii = convertedBits.size() - 1; ii >= 0; --ii) {
-            bits.push_back(convertedBits[ii]);
-        }
+        bitStr += std::bitset<8>(input[i]).to_string();
     }
-    return bits;
+    return bitStr;
 }
 
-std::vector<int> createHeader(int stringLength) {
-    std::vector<int> headerBits;
-    auto binStringLength = std::bitset<32>(stringLength);
-    // using a reversed for loop in order to get the right direction. Don't ask me why c++ is flipping the bitset when iterating over it
-    for (int ii = binStringLength.size() - 1; ii >= 0; --ii) {
-        headerBits.push_back(binStringLength[ii]);
-    }
-
-
-    return headerBits;
+// the header consists of 32 bits that indicate the length of the text 
+std::string createHeader(int stringLength) {
+    return std::bitset<32>(stringLength).to_string();
 }
 std::string decToBin(const int& input) {
     return std::bitset<8>(input).to_string();
 }
 
 unsigned char binToDec(const std::string& input) {
-    std::bitset<8> temp(input);
-    return temp.to_ulong();
+    return std::bitset<8>(input).to_ulong();
 }
 
 char binToText(const std::string& input) {
@@ -69,34 +57,33 @@ void leastSignificantBitEncode(std::string imagePath, std::string outputPath, st
 
         int bitCounter = 0;
 
-        // fetch the binary numbers of the input text
-        std::vector<int> binConvertedText = createHeader(input.length());
-        std::vector<int> binInput = textToBin(input);
-
-        binConvertedText.insert(binConvertedText.end(), binInput.begin(), binInput.end());
+        // create header for hidden text and append bits of the letters
+        std::string binConvertedText = createHeader(input.length());
+        binConvertedText += textToBin(input);
 
         // iterate over image pixels
         for (int i = 0; i < img.rows; i++) {
             // if number of needed pixels is reached stop iterating
-            if (bitCounter > neededBits) {
+            if (bitCounter >= neededBits) {
                 break;
             }
             for (int j = 0; j < img.cols; j++) {
                 // if number of needed pixels is reached stop iterating
-                if (bitCounter > neededBits) {
+                if (bitCounter >= neededBits) {
                     break;
                 }
                 // fetch RGB values of pixel
                 cv::Vec3b& intensity = img.at<cv::Vec3b>(i, j);
                 for (int k = 0; k < img.channels(); k++) {
-                    if (bitCounter > neededBits) {
+                    if (bitCounter >= neededBits) {
                         break;
                     }
                     // convert color value to binary number
-                    std::string binConvertedValue = decToBin(int(intensity.val[k]));
+                    auto ajsflksdf = intensity.val[k];
+                    std::string binConvertedValue = decToBin((int)intensity.val[k]);
 
                     // manipulate last bit of binary number
-                    binConvertedValue.replace(7, 1, std::to_string(binConvertedText[bitCounter]));
+                    binConvertedValue[7] = binConvertedText[bitCounter];
 
                     // change out color value
                     intensity.val[k] = binToDec(binConvertedValue);
