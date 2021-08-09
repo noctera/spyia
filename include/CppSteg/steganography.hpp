@@ -20,7 +20,7 @@ std::string textToBin(const std::string& input) {
     return bitStr;
 }
 
-// the header consists of 32 bits that indicate the length of the text 
+// the header consists of 32 bits that indicate the length of the text
 std::string createHeader(int stringLength) {
     return std::bitset<32>(stringLength).to_string();
 }
@@ -41,10 +41,24 @@ int decodeHeader(std::string header) {
     return static_cast<int>(temp.to_ulong());
 }
 
+void manipulateBit(unsigned char& pixel, const char& bit) {
+    std::string binConvertedValue = decToBin(pixel);
+
+    // manipulate last bit of binary number
+    binConvertedValue[7] = bit;
+
+    // change out color value
+    pixel = binToDec(binConvertedValue);
+}
+
 
 void leastSignificantBitEncode(std::string imagePath, std::string outputPath, std::string input) {
     try {
         cv::Mat img = cv::imread(imagePath);
+
+        if (img.empty()) {
+            throw std::invalid_argument("Could not open image");
+        }
 
         // calculate maximum amount of bits to change and check if text fits into it
         int maxImgBits = img.rows * img.cols * img.channels();
@@ -52,7 +66,7 @@ void leastSignificantBitEncode(std::string imagePath, std::string outputPath, st
         int neededBits = input.size() * 8 + 32;
 
         if (maxImgBits < neededBits) {
-            throw std::length_error("text does not fit in Picture");
+            throw std::length_error("Text does not fit in image");
         }
 
         int bitCounter = 0;
@@ -79,14 +93,7 @@ void leastSignificantBitEncode(std::string imagePath, std::string outputPath, st
                         break;
                     }
                     // convert color value to binary number
-                    auto ajsflksdf = intensity.val[k];
-                    std::string binConvertedValue = decToBin((int)intensity.val[k]);
-
-                    // manipulate last bit of binary number
-                    binConvertedValue[7] = binConvertedText[bitCounter];
-
-                    // change out color value
-                    intensity.val[k] = binToDec(binConvertedValue);
+                    manipulateBit(intensity.val[k], binConvertedText[bitCounter]);
                     ++bitCounter;
                 }
             }
@@ -100,6 +107,10 @@ void leastSignificantBitEncode(std::string imagePath, std::string outputPath, st
 
 std::string leastSignificantBitDecode(std::string imagePath) {
     cv::Mat img = cv::imread(imagePath);
+
+    if (img.empty()) {
+        throw std::invalid_argument("Could not open image");
+    }
 
     int bitCounter = 0;
     int maxConvertedBits = 0;
@@ -120,12 +131,13 @@ std::string leastSignificantBitDecode(std::string imagePath) {
                 if (maxConvertedBits > length) {
                     break;
                 }
-                std::string binConvertedValue = decToBin(int(intensity.val[k]));
+                std::string binConvertedValue = decToBin(intensity.val[k]);
                 // as long as 37 bits are not reached store all 37 bits in a string
 
                 if (headerCounter == 32) {
                     length = decodeHeader(header) * 8;
-                    // std::cout << "filetype: " << jasdflkasfj["filetype"] << std::endl << "colorSpace: " << jasdflkasfj["colorSpace"] << std::endl << "length: " << jasdflkasfj["length"] << std::endl;
+                    // std::cout << "filetype: " << jasdflkasfj["filetype"] << std::endl << "colorSpace: " <<
+                    // jasdflkasfj["colorSpace"] << std::endl << "length: " << jasdflkasfj["length"] << std::endl;
                     ++headerCounter;
                 }
 
