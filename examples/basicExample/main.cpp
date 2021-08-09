@@ -3,16 +3,9 @@
 #include <chrono>
 
 int main() {
-    // hiding secret message
     // Starting time for the clock
-
-    std::string testString = "";
-    for (int i = 0; i < 500000; ++i) {
-        testString += "t";
-    }
-
-        auto start = std::chrono::high_resolution_clock::now();
-    steg::leastSignificantBitEncode("/home/julian/CppSteg/input.png", "/home/julian/CppSteg/output.png", testString);
+    auto start = std::chrono::high_resolution_clock::now();
+    steg::leastSignificantBitEncode("/home/julian/CppSteg/input.png", "/home/julian/CppSteg/output.png", "12345678910");
 
     // Ending time for the clock
     auto stop = std::chrono::high_resolution_clock::now();
@@ -23,5 +16,5 @@ int main() {
     std::cout << "Time taken by insertion sort: " << duration.count() << " microseconds" << std::endl;
 
     // decode message from manipulated picture
-    //std::cout << steg::leastSignificantBitDecode("/home/julian/CppSteg/output.png") << std::endl;
+    std::cout << steg::leastSignificantBitDecode("/home/julian/CppSteg/output.png") << std::endl;
 }
