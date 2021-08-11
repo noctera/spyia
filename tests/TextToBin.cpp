@@ -1,4 +1,4 @@
-#include "CppSteg/steganography.hpp"
+#include "CppSteg/Conversions.hpp"
 #include <catch2/catch.hpp>
 #include <map>
 #include <string>
@@ -13,8 +13,8 @@ TEST_CASE("Check lowercase ASCII letters", "[textToBin]") {
         {"u", "01110101"}, {"v", "01110110"}, {"w", "01110111"}, {"x", "01111000"}, {"y", "01111001"},
         {"z", "01111010"}};
 
-    for (auto const& [key, value] : letterBinaryDict) {
-        REQUIRE(steg::textToBin(key) == value);
+    for (auto const& x : letterBinaryDict) {
+        REQUIRE(cppsteg::conv::textToBin(x.first) == x.second);
     }
 }
 
@@ -27,8 +27,8 @@ TEST_CASE("Check upercase ASCII letters", "[textToBin]") {
         {"U", "01010101"}, {"V", "01010110"}, {"W", "01010111"}, {"X", "01011000"}, {"Y", "01011001"},
         {"Z", "01011010"}};
 
-    for (auto const& [key, value] : letterBinaryDict) {
-        REQUIRE(steg::textToBin(key) == value);
+    for (auto const& x : letterBinaryDict) {
+        REQUIRE(cppsteg::conv::textToBin(x.first) == x.second);
     }
 }
 
@@ -44,36 +44,7 @@ TEST_CASE("Check special ASCII letters", "[textToBin]") {
         {"]", "01011101"}, {"^", "01011110"}, {"_", "01011111"},  {"`", "01100000"}, {"{", "01111011"},
         {"|", "01111100"}, {"}", "01111101"}, {"~", "01111110"}};
 
-    for (auto const& [key, value] : letterBinaryDict) {
-        REQUIRE(steg::textToBin(key) == value);
+    for (auto const& x : letterBinaryDict) {
+        REQUIRE(cppsteg::conv::textToBin(x.first) == x.second);
     }
 }
-
-TEST_CASE("Extra Test Case", "[textToBin]") {
-    std::string testCase = steg::textToBin("Hello");
-    SECTION(testCase) {
-        REQUIRE(testCase == "0100100001100101011011000110110001101111");
-    }
-}
-/*
-REQUIRE(steg::textToBin("N") == std::vector<int>{0, 1, 0, 0, 1, 1, 1, 0});
-REQUIRE(steg::textToBin("O") == std::vector<int>{0, 1, 0, 0, 1, 1, 1, 1});
-REQUIRE(steg::textToBin("P") == std::vector<int>{0, 1, 0, 1, 0, 0, 0, 0});
-REQUIRE(steg::textToBin("Q") == std::vector<int>{0, 1, 0, 1, 0, 0, 0, 1});
-REQUIRE(steg::textToBin("R") == std::vector<int>{0, 1, 0, 1, 0, 0, 1, 0});
-REQUIRE(steg::textToBin("S") == std::vector<int>{0, 1, 0, 1, 0, 0, 1, 1});
-REQUIRE(steg::textToBin("T") == std::vector<int>{0, 1, 0, 1, 0, 1, 0, 0});
-REQUIRE(steg::textToBin("U") == std::vector<int>{0, 1, 0, 1, 0, 1, 0, 1});
-REQUIRE(steg::textToBin("V") == std::vector<int>{0, 1, 0, 1, 0, 1, 1, 0});
-REQUIRE(steg::textToBin("W") == std::vector<int>{0, 1, 0, 1, 0, 1, 1, 1});
-REQUIRE(steg::textToBin("X") == std::vector<int>{0, 1, 0, 1, 1, 0, 0, 0});
-REQUIRE(steg::textToBin("Y") == std::vector<int>{0, 1, 0, 1, 1, 0, 0, 1});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{0, 1, 0, 1, 1, 0, 1, 0});
-REQUIRE(steg::textToBin(" ") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});
-REQUIRE(steg::textToBin("Z") == std::vector<int>{00100000});*/

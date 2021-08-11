@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
 
-project(cppsteg_tests)
+project(CppSteg_Test)
 
 include(FetchContent)
 
@@ -8,7 +8,9 @@ CPMAddPackage("gh:catchorg/Catch2@2.5.0")
 add_executable(
 	${PROJECT_NAME}
 	"main.cpp"
+	"BinToText.cpp"
 	"TextToBin.cpp"
+	
 )
 
 target_link_libraries(
@@ -18,4 +20,4 @@ target_link_libraries(
 	Catch2::Catch2
 )
 
-add_test(CppStegLogSuit ${PROJECT_NAME})
+add_test(CppStegTestSuite ${PROJECT_NAME})

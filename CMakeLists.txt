@@ -27,7 +27,6 @@ project(CppSteg
 )
 
 find_package( OpenCV REQUIRED )
-include(CTest)
 
 option(CPPSTEG_BUILD_EXAMPLES "Enables example building" ON)
 option(CPPSTEG_BUILD_TESTS "Enables tests building" ON)
@@ -57,9 +56,16 @@ if (CPPSTEG_BUILD_EXAMPLES)
 	add_subdirectory(${ExamplesDir})
 endif()
 
-if (CPPSTEG_BUILD_TESTS)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+	include(CTest)
+
 	set(TestsDir "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
-	add_subdirectory(${TestsDir})
+
+	if (CPPSTEG_BUILD_TESTS)
+		add_subdirectory(${TestsDir})
+	endif()
+
 endif()
 
 
