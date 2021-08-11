@@ -10,6 +10,8 @@ add_executable(
 	"main.cpp"
 	"BinToText.cpp"
 	"TextToBin.cpp"
+	"BinToDec.cpp"
+	"DecToBin.cpp"
 	
 )
 

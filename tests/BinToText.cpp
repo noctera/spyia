@@ -2,9 +2,8 @@
 #include <catch2/catch.hpp>
 #include <map>
 #include <string>
-#include <vector>
 
-TEST_CASE("Check lowercase ASCII letters", "[binToText]") {
+TEST_CASE("Check binary to text conversion for lowercase ASCII letters", "[binToText]") {
     std::map<std::string, std::string> binaryLetterDict{
         {"01100001", "a"}, {"01100010", "b"}, {"01100011", "c"}, {"01100100", "d"}, {"01100101", "e"},
         {"01100110", "f"}, {"01100111", "g"}, {"01101000", "h"}, {"01101001", "i"}, {"01101010", "j"},
@@ -18,7 +17,7 @@ TEST_CASE("Check lowercase ASCII letters", "[binToText]") {
     }
 }
 
-TEST_CASE("Check upercase ASCII letters", "[binToText]") {
+TEST_CASE("Check binary to text conversion for upercase ASCII letters", "[binToText]") {
     std::map<std::string, std::string> binaryLetterDict{
         {"01000001", "A"}, {"01000010", "B"}, {"01000011", "C"}, {"01000100", "D"}, {"01000101", "E"},
         {"01000110", "F"}, {"01000111", "G"}, {"01001000", "H"}, {"01001001", "I"}, {"01001010", "J"},
@@ -32,7 +31,7 @@ TEST_CASE("Check upercase ASCII letters", "[binToText]") {
     }
 }
 
-TEST_CASE("Check special ASCII letters", "[binToText]") {
+TEST_CASE("Check binary to text conversion for special ASCII letters", "[binToText]") {
     std::map<std::string, std::string> binaryLetterDict{
         {"00100000", " "}, {"00100001", "!"}, {"00100010", "\""}, {"00100011", "#"}, {"00100100", "$"},
         {"00100101", "%"}, {"00100110", "&"}, {"00100111", "'"},  {"00101000", "("}, {"00101001", ")"},
