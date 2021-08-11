@@ -1,4 +1,9 @@
+#ifndef CPPSTEG_LEASTBIT_HPP
+#define CPPSTEG_LEASTBIT_HPP
+
 #pragma once
+
+#include "Conversions.hpp"
 #include <bitset>
 #include <exception>
 #include <filesystem>
@@ -9,46 +14,17 @@
 #include <string>
 #include <vector>
 
-namespace steg {
-
-std::string textToBin(const std::string& input) {
-    std::string bitStr = "";
-
-    for (std::size_t i = 0; i < input.size(); ++i) {
-        bitStr += std::bitset<8>(input[i]).to_string();
-    }
-    return bitStr;
-}
-
-// the header consists of 32 bits that indicate the length of the text
-std::string createHeader(int stringLength) {
-    return std::bitset<32>(stringLength).to_string();
-}
-std::string decToBin(const int& input) {
-    return std::bitset<8>(input).to_string();
-}
-
-unsigned char binToDec(const std::string& input) {
-    return std::bitset<8>(input).to_ulong();
-}
-
-char binToText(const std::string& input) {
-    return std::bitset<8>(input).to_ulong();
-}
-
-int decodeHeader(std::string header) {
-    std::bitset<32> temp(header);
-    return static_cast<int>(temp.to_ulong());
-}
+namespace cppsteg {
+namespace leastBit {
 
 void manipulateBit(unsigned char& pixel, const char& bit) {
-    std::string binConvertedValue = decToBin(pixel);
+    std::string binConvertedValue = conv::decToBin(pixel);
 
     // manipulate last bit of binary number
     binConvertedValue[7] = bit;
 
     // change out color value
-    pixel = binToDec(binConvertedValue);
+    pixel = conv::binToDec(binConvertedValue);
 }
 
 
@@ -72,8 +48,8 @@ void leastSignificantBitEncode(std::string imagePath, std::string outputPath, st
         int bitCounter = 0;
 
         // create header for hidden text and append bits of the letters
-        std::string binConvertedText = createHeader(input.length());
-        binConvertedText += textToBin(input);
+        std::string binConvertedText = conv::createHeader(input.length());
+        binConvertedText += conv::textToBin(input);
 
         // iterate over image pixels
         for (int i = 0; i < img.rows; i++) {
@@ -131,11 +107,11 @@ std::string leastSignificantBitDecode(std::string imagePath) {
                 if (maxConvertedBits > length) {
                     break;
                 }
-                std::string binConvertedValue = decToBin(intensity.val[k]);
+                std::string binConvertedValue = conv::decToBin(intensity.val[k]);
                 // as long as 37 bits are not reached store all 37 bits in a string
 
                 if (headerCounter == 32) {
-                    length = decodeHeader(header) * 8;
+                    length = conv::decodeHeader(header) * 8;
                     // std::cout << "filetype: " << jasdflkasfj["filetype"] << std::endl << "colorSpace: " <<
                     // jasdflkasfj["colorSpace"] << std::endl << "length: " << jasdflkasfj["length"] << std::endl;
                     ++headerCounter;
@@ -151,7 +127,7 @@ std::string leastSignificantBitDecode(std::string imagePath) {
                     ++bitCounter;
                     // if 8 bits were extracted convert them to a string
                     if (bitCounter == 8) {
-                        fullText += binToText(bits);
+                        fullText += conv::binToText(bits);
                         bitCounter = 0;
                         bits = "";
                     }
@@ -161,4 +137,7 @@ std::string leastSignificantBitDecode(std::string imagePath) {
     }
     return fullText;
 }
-} // namespace steg
+} // namespace cppsteg::leastBit
+}
+
+#endif
