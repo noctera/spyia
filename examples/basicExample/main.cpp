@@ -8,7 +8,7 @@
 int main() {
     // Starting time for the clock
     auto start = std::chrono::high_resolution_clock::now();
-    cppsteg::leastBit::leastSignificantBitEncode("/home/julian/CppSteg/input.png", "/home/julian/CppSteg/output.png", "12345678910");
+    cppsteg::leastBit::encodeText("/home/julian/CppSteg/input.png", "/home/julian/CppSteg/output.png", "12345678910");
 
     // Ending time for the clock
     auto stop = std::chrono::high_resolution_clock::now();
@@ -19,5 +19,5 @@ int main() {
     std::cout << "Time taken by insertion sort: " << duration.count() << " microseconds" << std::endl;
 
     // decode message from manipulated picture
-    std::cout << cppsteg::leastBit::leastSignificantBitDecode("/home/julian/CppSteg/output.png") << std::endl;
+    std::cout << cppsteg::leastBit::decodeText("/home/julian/CppSteg/output.png") << std::endl;
 }

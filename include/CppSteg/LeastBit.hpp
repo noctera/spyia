@@ -28,7 +28,7 @@ void manipulateBit(unsigned char& pixel, const char& bit) {
 }
 
 
-void leastSignificantBitEncode(std::string imagePath, std::string outputPath, std::string input) {
+void encodeText(std::string imagePath, std::string outputPath, std::string input) {
     try {
         cv::Mat img = cv::imread(imagePath);
 
@@ -81,7 +81,7 @@ void leastSignificantBitEncode(std::string imagePath, std::string outputPath, st
     }
 }
 
-std::string leastSignificantBitDecode(std::string imagePath) {
+std::string decodeText(std::string imagePath) {
     cv::Mat img = cv::imread(imagePath);
 
     if (img.empty()) {
