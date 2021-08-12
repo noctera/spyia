@@ -35,7 +35,6 @@ add_library(${PROJECT_NAME} INTERFACE)
 
 target_link_libraries(${PROJECT_NAME} INTERFACE 
 	opencv_core
-	opencv_imgproc
 	opencv_imgcodecs
 	)
 
