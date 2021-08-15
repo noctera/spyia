@@ -2,6 +2,9 @@
 
 This is a single header "Least significant bit (LSB)" steganography lib to hide text in an image
 
+REQUIREMENTS
+- OpenCV installed
+
 ## Example
 
 ```cpp
