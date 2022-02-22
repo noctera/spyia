@@ -1,7 +1,4 @@
-cmake-build-debug/
-.idea/
-build/
-bin/
-docker/database/
-.vscode/
-*.png
+/build*
+/.vscode
+/cpm_modules
+.DS_Store

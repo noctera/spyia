@@ -1,70 +1,78 @@
-cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
+# ---- Project ----
 
-set(CPM_DOWNLOAD_VERSION 0.32.0)
+# Note: update this to your new project's name and version
+project(
+  Greeter
+  VERSION 1.0
+  LANGUAGES CXX
+)
 
-if(CPM_SOURCE_CACHE)
-  set(CPM_DOWNLOAD_LOCATION "${CPM_SOURCE_CACHE}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-elseif(DEFINED ENV{CPM_SOURCE_CACHE})
-  set(CPM_DOWNLOAD_LOCATION "$ENV{CPM_SOURCE_CACHE}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-else()
-  set(CPM_DOWNLOAD_LOCATION "${CMAKE_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-endif()
+# ---- Include guards ----
 
-if(NOT (EXISTS ${CPM_DOWNLOAD_LOCATION}))
-  message(STATUS "Downloading CPM.cmake to ${CPM_DOWNLOAD_LOCATION}")
-  file(DOWNLOAD
-       https://github.com/TheLartians/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake
-       ${CPM_DOWNLOAD_LOCATION}
+if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+  message(
+    FATAL_ERROR
+      "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there."
   )
 endif()
 
-include(${CPM_DOWNLOAD_LOCATION})
+# ---- Add dependencies via CPM ----
+# see https://github.com/TheLartians/CPM.cmake for more info
 
-project(CppSteg
-	LANGUAGES CXX
-	VERSION 0.0.1
+include(cmake/CPM.cmake)
+
+# PackageProject.cmake will be used to make our target installable
+CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.8.0")
+
+CPMAddPackage(
+  NAME fmt
+  GIT_TAG 7.1.3
+  GITHUB_REPOSITORY fmtlib/fmt
+  OPTIONS "FMT_INSTALL YES" # create an installable target
 )
 
-find_package( OpenCV REQUIRED )
+# ---- Add source files ----
 
-option(CPPSTEG_BUILD_EXAMPLES "Enables example building" ON)
-option(CPPSTEG_BUILD_TESTS "Enables tests building" ON)
+# Note: globbing sources is considered bad practice as CMake's generators may not detect new files
+# automatically. Keep that in mind when changing files, or explicitly mention them here.
+file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
+# ---- Create library ----
+
+# Note: for header-only libraries change all PUBLIC flags to INTERFACE and create an interface
+# target: add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME} INTERFACE)
 
-target_link_libraries(${PROJECT_NAME} INTERFACE 
-	opencv_core
-	opencv_imgcodecs
-	)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+
+# being a cross-platform target, we enforce standards conformance on MSVC
+target_compile_options(${PROJECT_NAME} INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
+
+# Link dependencies
+target_link_libraries(${PROJECT_NAME} INTERFACE fmt::fmt)
 
 target_include_directories(
-	${PROJECT_NAME}
-	INTERFACE
-	${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                         $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
 
-target_compile_features(
-	${PROJECT_NAME}
-	INTERFACE
-	cxx_std_11
+# ---- Create an installable target ----
+# this allows users to install and find the library via `find_package()`.
+
+# the location where the project's version header will be placed should match the project's regular
+# header paths
+string(TOLOWER ${PROJECT_NAME}/version.h VERSION_HEADER_LOCATION)
+
+packageProject(
+  NAME ${PROJECT_NAME}
+  VERSION ${PROJECT_VERSION}
+  NAMESPACE ${PROJECT_NAME}
+  BINARY_DIR ${PROJECT_BINARY_DIR}
+  INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
+  INCLUDE_DESTINATION include/${PROJECT_NAME}-${PROJECT_VERSION}
+  VERSION_HEADER "${VERSION_HEADER_LOCATION}"
+  COMPATIBILITY SameMajorVersion
+  DEPENDENCIES "fmt 7.1.3"
 )
-
-if (CPPSTEG_BUILD_EXAMPLES)
-	set(ExamplesDir "${CMAKE_CURRENT_SOURCE_DIR}/examples/")
-	add_subdirectory(${ExamplesDir})
-endif()
-
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-
-	include(CTest)
-
-	set(TestsDir "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
-
-	if (CPPSTEG_BUILD_TESTS)
-		add_subdirectory(${TestsDir})
-	endif()
-
-endif()
-
-
