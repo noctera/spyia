@@ -1,12 +1,9 @@
-#ifndef CPPSTEG_CONVERSIONS_HPP
-#define CPPSTEG_CONVERSIONS_HPP
-
 #pragma once
 
 #include <bitset>
 #include <string>
 
-namespace cppsteg::conv {
+namespace Spyia {
 inline std::string textToBin(const std::string& input) {
     std::string bitStr = "";
 
@@ -37,6 +34,4 @@ inline int decodeHeader(std::string header) {
     return static_cast<int>(temp.to_ulong());
 }
 
-} // namespace conv
-
-#endif
+}

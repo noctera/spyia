@@ -1,7 +1,7 @@
-cmake-build-debug/
-.idea/
-build/
-bin/
-docker/database/
-.vscode/
-*.png
+build
+.cache
+.vscode
+compile_commands.json
+gdbserver.exe.stackdump
+gh-pages
+scripts/build_overrides.sh

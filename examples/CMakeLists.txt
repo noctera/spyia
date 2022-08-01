@@ -1,3 +1,1 @@
-cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
-
-add_subdirectory(basicExample)
+add_subdirectory(basic)
