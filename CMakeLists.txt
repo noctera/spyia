@@ -20,6 +20,7 @@ include (./cmake/example_target.cmake)
 include (./cmake/options.cmake)
 
 include (./cmake/fmt.cmake)
+include (./cmake/cryptopp.cmake)
 
 add_subdirectory(src/spyia)
 
@@ -31,8 +32,4 @@ if (${SPYIA_BUILD_TESTS})
     include(./cmake/test_target.cmake)
     include(./cmake/gtest.cmake)
     add_subdirectory(test)
-endif()
-
-if (${SPYIA_BUILD_DOCUMENTATION})
-    add_subdirectory(docs_source)
 endif()

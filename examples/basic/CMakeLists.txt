@@ -1,5 +1,6 @@
-add_executable(basic main.cpp)
+cmake_minimum_required(VERSION 3.21)
 
-target_link_libraries(basic PRIVATE spyia)
+project(spyia-basic VERSION 0.1.0)
+add_executable(spyia-basic main.cpp)
 
-set_target_outputs(basic)
+target_link_libraries(spyia-basic PRIVATE spyia)
