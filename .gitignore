@@ -5,3 +5,5 @@ compile_commands.json
 gdbserver.exe.stackdump
 gh-pages
 scripts/build_overrides.sh
+.idea
+cmake-build-debug
