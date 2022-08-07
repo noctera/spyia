@@ -4,6 +4,8 @@ namespace Spyia
 {
     enum class StegTypes
     {
-        LSB
+        LSB,
+        LSB_SPREAD,
+        LSB_SHUFFLE
     };
 }

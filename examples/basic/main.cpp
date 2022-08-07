@@ -3,29 +3,16 @@
 #include <spyia/fileTypes/image.hpp>
 #include <spyia/stegHandler.hpp>
 #include <spyia/secretFile.hpp>
+#include <spyia/steganography/stegTypes.hpp>
+#include <spyia/outputStorage.hpp>
 
 int main()
 {
-    Spyia::StegHandler stegHandler("/home/julian/Desktop/Test");
-    stegHandler.addSecretFile(Spyia::SecretFile("/home/julian/Desktop/logo192.png"));
-    stegHandler.encrypt_aes_cbc();
+    Spyia::SecretFile secretFile("/home/julian/Desktop/logo192.png");
+    secretFile.encrypt_aes_cbc("dasIstEinTest123");
 
-    // stegHandler.addOutputFile(Spyia::FileType::Image("path"), Spyia::Method::LSB);
-    // stegHandler.addOutputFile(Spyia::FileType::Image("path"), Spyia::Method::LSB);
+    Spyia::OutputStorage outputStorage;
+    outputStorage.addImage(Spyia::FileType::Image("/home/julian/Desktop/logo512.png"), Spyia::StegTypes::LSB );
 
-    // Spyia::Secret secret(Spyia::Type::)
-
-    
-
-    // Spyia::SecretFile secretFile("/home/julian/Desktop/logo192.png");
-    // secretFile.aes_encrypt();
-
-    // Spyia::OutputStorage outputStorage("/home/julian/Test/", secretFile);
-    // outputStorage.addFile(Spyia::FileType::Image("/path"), Spyia::Technique::LSB);
-    // outputStorage.addFile(Spyia::FileType::Image("path"), Spyia::Technique::LSB);
-
-    // outputStorage.hide();
-
-    // std::cout << aes_encrypt(secretFile.getContent()) << std::endl;
-    // Spyia::FileType::Image image("/home/julian/Desktop/input.jpg");
+    Spyia::StegHandler stegHandler("/home/julian/Desktop/Test", secretFile, outputStorage);
 }

@@ -29,8 +29,9 @@ namespace Spyia
         std::cout << size << std::endl;
     }
 
-    void SecretFile::encrypt_aes_cbc() {
-        const auto [encoded, iv] = aes_cbc_encrypt(m_content, "dasisteintest123");
+    void SecretFile::encrypt_aes_cbc(const std::string &key) {
+        m_encryptionType = Spyia::EncryptionType::AES_CBC;
+        const auto [encoded, iv] = aes_cbc_encrypt(m_content, key);
         m_encryptedContent = encoded;
         m_iv = iv;
     }
