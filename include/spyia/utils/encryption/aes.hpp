@@ -24,11 +24,9 @@ std::tuple<std::string, std::string> aes_cbc_encrypt(const std::string& input, c
     prng.GenerateBlock(key, key.size());
     prng.GenerateBlock(iv, iv.size());
     
-    std::string cipher, encoded, individualVector;
+    std::string cipher, CipherEncoded, individualVector, individualVectorEncoded;
 
-    /*********************************\
-    \*********************************/
-
+    // encrypt string with AES (CBC) algorithm
     try
     {
         CBC_Mode< AES >::Encryption e;
@@ -46,14 +44,21 @@ std::tuple<std::string, std::string> aes_cbc_encrypt(const std::string& input, c
         exit(1);
     }
 
-     // Pretty print
+    // convert cipher output to printable version
     StringSource ss2(
-        iv,
+        cipher,
         true,
-        new HexEncoder(new StringSink(individualVector)) // HexEncoder
+        new HexEncoder(new StringSink(CipherEncoded)) // HexEncoder
     ); // StringSource
 
-    individualVector = reinterpret_cast<const char*>(iv.data()), iv.size();
+    individualVector = std::string(reinterpret_cast<const char*>(iv.data()), iv.size());
 
-    return std::make_tuple(encoded, individualVector);
+    // convert IV to printable version
+    StringSource ss3(
+        individualVector,
+        true,
+        new HexEncoder(new StringSink(individualVectorEncoded)) // HexEncoder
+    ); // StringSource
+
+    return std::make_tuple(CipherEncoded, individualVectorEncoded);
 }
