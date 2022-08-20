@@ -3,6 +3,8 @@ add_library(spyia STATIC
 	stegHandler.cpp
 	outputStorage.cpp
     fileTypes/image.cpp
+	encryption/aes.cpp
+	encryption/encryptionBase.cpp
 )
 
 find_package( OpenCV REQUIRED )
