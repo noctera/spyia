@@ -1,26 +1,28 @@
 #pragma once
 
 #include <string>
-#include <spyia/utils/encryption/encryptionTypes.hpp>
+#include <memory>
+#include <spyia/encryption/encryptionBase.hpp>
+#include <spyia/files/fileTypeBase.hpp>
 
 namespace Spyia
 {
     class SecretFile
     {
         public:
-          SecretFile() = default;
-          explicit SecretFile(const std::string& filePath);
+          SecretFile(FileType::FileTypeBase& file);
+          SecretFile(FileType::FileTypeBase& file, Encryption::EncryptionBase& encryption);
 
-          void print() const;
-          const std::string& getContent() const;
+          std::string getContent() const;
+          const std::string& getEncryptedContent() const;
 
           // encryption methods
-          void encrypt_aes_cbc(const std::string &key);
+          void encrypt();
 
         private:
-          std::string m_content;
+          FileType::FileTypeBase &m_file;
+          Encryption::EncryptionBase &m_encryption;
+
           std::string m_encryptedContent;
-          std::string m_iv;
-          Spyia::EncryptionType m_encryptionType;
     };
 }

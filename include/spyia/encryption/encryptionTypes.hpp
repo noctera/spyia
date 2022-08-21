@@ -1,9 +1,10 @@
 #pragma once
 
-namespace Spyia
+namespace Spyia::Encryption
 {
     enum class EncryptionType
     {
-        AES_CBC
+        AES_CBC,
+        NONE
     };
 }

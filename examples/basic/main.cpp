@@ -1,18 +1,20 @@
 #include <iostream>
 
-#include <spyia/fileTypes/image.hpp>
-#include <spyia/stegHandler.hpp>
+#include <spyia/files/image.hpp>
 #include <spyia/secretFile.hpp>
 #include <spyia/steganography/stegTypes.hpp>
-#include <spyia/outputStorage.hpp>
+#include <spyia/encryption/aes.hpp>
+#include <spyia/encryption/none.hpp>
 
 int main()
 {
-    Spyia::SecretFile secretFile("/home/julian/Desktop/logo192.png");
-    secretFile.encrypt_aes_cbc("dasIstEinTest123");
+    Spyia::FileType::Image secretImage("/home/julian/Desktop/logo192.png", Spyia::FileTypes::PNG);
+    // Spyia::Encryption::None encryption;
+    Spyia::Encryption::AesCbc encryption("djwdktdldetdjtsj");
+    Spyia::SecretFile secretFile(secretImage, encryption);
 
-    Spyia::OutputStorage outputStorage;
-    outputStorage.addImage(Spyia::FileType::Image("/home/julian/Desktop/logo512.png"), Spyia::StegTypes::LSB );
+    // std::cout << secretFile.getContent() << std::endl;
 
-    Spyia::StegHandler stegHandler("/home/julian/Desktop/Test", secretFile, outputStorage);
+    secretFile.encrypt();
+    std::cout << secretFile.getEncryptedContent() << std::endl;
 }

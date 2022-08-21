@@ -7,12 +7,15 @@
 #include <spyia/encryption/encryptionBase.hpp>
 #include <spyia/encryption/encryptionTypes.hpp>
 
-namespace Spyia
+#include <cryptopp/rijndael.h>
+
+namespace Spyia::Encryption
 {
-    class EncryptionAes: public EncryptionBase
+    class AesCbc: public EncryptionBase
     {
       public:
-        EncryptionAes(std::string key, std::string iv);
+        explicit AesCbc(const std::string& key);
+        AesCbc(const std::string& key, const std::string& iv);
 
         const std::string &getKey();
         const std::string &getIv();

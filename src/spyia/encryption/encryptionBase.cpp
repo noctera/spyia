@@ -1,6 +1,6 @@
 #include <spyia/encryption/encryptionBase.hpp>
 
-using namespace Spyia;
+using namespace Spyia::Encryption;
 
 EncryptionBase::EncryptionBase(EncryptionType encryptionType)
     : m_encryptionType(encryptionType) {}

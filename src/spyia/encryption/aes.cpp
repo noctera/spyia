@@ -7,31 +7,45 @@
 #include <cryptopp/osrng.h>
 #include <cryptopp/hex.h>
 
-using namespace Spyia;
+using namespace Spyia::Encryption;
 
-EncryptionAes::EncryptionAes(std::string key, std::string iv)
-    : EncryptionBase(EncryptionType::AES_CBC), m_key(key), m_iv(iv)
-{}
+AesCbc::AesCbc(const std::string& key)
+    : EncryptionBase(EncryptionType::AES_CBC)
+{
+    if(key.length() != 16) {
+        throw std::invalid_argument( "key must have a length of 16" );
+    }
+    m_key = key;
+}
 
-const std::string& EncryptionAes::getKey()
+AesCbc::AesCbc(const std::string& key, const std::string& iv)
+    : EncryptionBase(EncryptionType::AES_CBC)
+{
+    if(key.length() != 16 || iv.length() != 16) {
+        throw std::invalid_argument( "key and iv must have a length of 16" );
+    }
+    m_key = key;
+}
+
+const std::string& AesCbc::getKey()
 {
     return m_key;
 }
 
-const std::string& EncryptionAes::getIv()
+const std::string& AesCbc::getIv()
 {
     return m_iv;
 }
 
-std::string EncryptionAes::encryptContent(const std::string &content)
+std::string AesCbc::encryptContent(const std::string &content)
 {
     using namespace CryptoPP;
 
     AutoSeededRandomPool prng;
     HexEncoder encoder(new FileSink(std::cout));
 
-    SecByteBlock key(reinterpret_cast<const byte*>(&m_key[0]), m_key.size());
-    SecByteBlock iv(AES::BLOCKSIZE);
+    CryptoPP::SecByteBlock key(reinterpret_cast<const CryptoPP::byte*>(&m_key[0]), m_key.size());
+    CryptoPP::SecByteBlock iv(reinterpret_cast<const CryptoPP::byte*>(&m_key[0]), m_key.size());
 
     prng.GenerateBlock(key, key.size());
     prng.GenerateBlock(iv, iv.size());

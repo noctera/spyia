@@ -4,16 +4,18 @@
 
 #include <spyia/encryption/encryptionTypes.hpp>
 
-namespace Spyia
+namespace Spyia::Encryption
 {
     class EncryptionBase
     {
-      protected:
-        explicit EncryptionBase(EncryptionType encryptionType);
       public:
+        explicit EncryptionBase(EncryptionType encryptionType);
+        virtual ~EncryptionBase() = default;
+
         const EncryptionType &getEncryptionType();
-        virtual std::string encryptContent(const std::string &content);
-      private:
+        virtual std::string encryptContent(const std::string &content) {};
+      protected:
         EncryptionType m_encryptionType;
+
     };
 }
