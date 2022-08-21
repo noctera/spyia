@@ -1,9 +1,9 @@
 add_library(spyia STATIC
     secretFile.cpp
-	stegHandler.cpp
-	outputStorage.cpp
-    fileTypes/image.cpp
+	files/fileTypeBase.cpp
+	files/image.cpp
 	encryption/aes.cpp
+    encryption/none.cpp
 	encryption/encryptionBase.cpp
 )
 
