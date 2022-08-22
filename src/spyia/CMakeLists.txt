@@ -5,6 +5,7 @@ add_library(spyia STATIC
 	encryption/aes.cpp
 	encryption/none.cpp
 	encryption/encryptionBase.cpp
+	steganography/stegAlgoBase.cpp
 )
 
 find_package( OpenCV REQUIRED )

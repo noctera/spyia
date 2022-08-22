@@ -1,7 +1,7 @@
 #pragma once
 
 #include <spyia/files/fileTypeBase.hpp>
-#include <spyia/files/fileTypes.hpp>
+#include <spyia/files/fileType.hpp>
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>

@@ -1,12 +1,12 @@
 #include <spyia/files/fileTypeBase.hpp>
 
 using namespace Spyia;
-using namespace Spyia::FileType;
+using namespace Spyia::File;
 
-FileTypeBase::FileTypeBase(FileTypes fileType)
+FileTypeBase::FileTypeBase(FileType fileType)
     : m_fileType(fileType) {}
 
-const FileTypes& FileTypeBase::getFileType()
+const FileType& FileTypeBase::getFileType()
 {
     return m_fileType;
 }

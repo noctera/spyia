@@ -1,5 +1,5 @@
 #include <spyia/files/image.hpp>
-#include <spyia/files/fileTypes.hpp>
+#include <spyia/files/fileType.hpp>
 #include <iostream>
 
 #include <fstream>

@@ -1,8 +1,8 @@
 #pragma once
 
-namespace Spyia
+namespace Spyia::Steganography
 {
-    enum class StegTypes
+    enum class StegType
     {
         LSB,
         LSB_SPREAD,

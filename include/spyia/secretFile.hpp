@@ -10,13 +10,13 @@ namespace Spyia
     class SecretFile
     {
         public:
-          SecretFile(std::unique_ptr<FileType::FileTypeBase> file);
-          SecretFile(std::unique_ptr<FileType::FileTypeBase> file, std::unique_ptr<Encryption::EncryptionBase> encryption);
+          SecretFile(std::unique_ptr<File::FileTypeBase> file);
+          SecretFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Encryption::EncryptionBase> encryption);
 
           std::string getContent() const;
           const std::string& getEncryptedContent() const;
 
-          void setFile(std::unique_ptr<FileType::FileTypeBase> file);
+          void setFile(std::unique_ptr<File::FileTypeBase> file);
           void setEncryption(std::unique_ptr<Encryption::EncryptionBase> encryption);
 
           bool isEncrypted() const;
@@ -25,7 +25,7 @@ namespace Spyia
           void encrypt();
 
         private:
-          std::unique_ptr<FileType::FileTypeBase> m_file;
+          std::unique_ptr<File::FileTypeBase> m_file;
           std::unique_ptr<Encryption::EncryptionBase> m_encryption;
 
           std::string m_encryptedContent;

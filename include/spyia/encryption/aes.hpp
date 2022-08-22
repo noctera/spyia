@@ -5,7 +5,7 @@
 #include <tuple>
 
 #include <spyia/encryption/encryptionBase.hpp>
-#include <spyia/encryption/encryptionTypes.hpp>
+#include <spyia/encryption/encryptionType.hpp>
 
 #include <cryptopp/rijndael.h>
 

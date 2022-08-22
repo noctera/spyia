@@ -1,17 +1,17 @@
 #pragma once
 
-#include <spyia/files/fileTypes.hpp>
+#include <spyia/files/fileType.hpp>
 
 #include <string>
 
-namespace Spyia::FileType {
+namespace Spyia::File {
     class FileTypeBase {
       public:
-        explicit FileTypeBase(FileTypes fileType);
+        explicit FileTypeBase(FileType fileType);
 
-        const FileTypes &getFileType();
+        const FileType &getFileType();
         virtual const std::string& getBinaryContent() const {};
       protected:
-        const FileTypes m_fileType;
+        const FileType m_fileType;
     };
 }

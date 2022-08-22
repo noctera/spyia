@@ -1,15 +1,15 @@
 #include <spyia/secretFile.hpp>
 #include <spyia/encryption/none.hpp>
-#include <spyia/encryption/encryptionTypes.hpp>
+#include <spyia/encryption/encryptionType.hpp>
 
 #include <iostream>
 
 using namespace Spyia;
 
-SecretFile::SecretFile(std::unique_ptr<FileType::FileTypeBase> file, std::unique_ptr<Encryption::EncryptionBase> encryption)
+SecretFile::SecretFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Encryption::EncryptionBase> encryption)
         : m_file(std::move(file)), m_encryption(std::move(encryption)) {}
 
-SecretFile::SecretFile(std::unique_ptr<FileType::FileTypeBase> file)
+SecretFile::SecretFile(std::unique_ptr<File::FileTypeBase> file)
         : m_file(std::move(file)), m_encryption(std::make_unique<Encryption::EncryptionBase>(Encryption::None())) {}
 
 std::string SecretFile::getContent() const {
@@ -26,7 +26,7 @@ const std::string& SecretFile::getEncryptedContent() const {
     return m_encryptedContent;
 }
 
-void SecretFile::setFile(std::unique_ptr<FileType::FileTypeBase> file)
+void SecretFile::setFile(std::unique_ptr<File::FileTypeBase> file)
 {
     m_file = std::move(file);
 }

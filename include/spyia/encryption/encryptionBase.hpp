@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <spyia/encryption/encryptionTypes.hpp>
+#include <spyia/encryption/encryptionType.hpp>
 
 namespace Spyia::Encryption
 {

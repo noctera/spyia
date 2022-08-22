@@ -1,9 +1,9 @@
 #pragma once
 
-namespace Spyia
+namespace Spyia::File
 {
     // all different file types
-    enum class FileTypes
+    enum class FileType
     {
         JPEG,
         GIF,
