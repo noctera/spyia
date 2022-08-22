@@ -6,15 +6,20 @@
 #include <spyia/encryption/aes.hpp>
 #include <spyia/encryption/none.hpp>
 
+using namespace Spyia;
+
 int main()
 {
-    Spyia::FileType::Image secretImage("/home/julian/Desktop/logo192.png", Spyia::FileTypes::PNG);
+    FileType::Image secretImage("/home/julian/Desktop/logo192.png", FileTypes::PNG);
     // Spyia::Encryption::None encryption;
-    Spyia::Encryption::AesCbc encryption("djwdktdldetdjtsj");
-    Spyia::SecretFile secretFile(secretImage, encryption);
+    SecretFile secretFile(std::make_unique<FileType::Image>(secretImage));
+    secretFile.setEncryption(std::make_unique<Encryption::AesCbc>("tjtjtjtjtjtjtjtj"));
+    std::cout << "Is encrypted: " << secretFile.isEncrypted() << std::endl;
+
+    // secretFile.setFile(std::make_unique<Spyia::FileType::Image>("/home/julian/Desktop/logo512.png", FileTypes::PNG));
 
     // std::cout << secretFile.getContent() << std::endl;
 
-    secretFile.encrypt();
-    std::cout << secretFile.getEncryptedContent() << std::endl;
+    // secretFile.encrypt();
+    // std::cout << secretFile.getEncryptedContent() << std::endl;
 }
