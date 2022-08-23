@@ -10,3 +10,7 @@ const FileType& FileTypeBase::getFileType()
 {
     return m_fileType;
 }
+
+int FileTypeBase::getFileBits() {
+    return m_fileBits;
+}

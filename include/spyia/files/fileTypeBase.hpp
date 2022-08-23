@@ -11,7 +11,10 @@ namespace Spyia::File {
 
         const FileType &getFileType();
         virtual const std::string& getBinaryContent() const {};
+        int getFileBits();
       protected:
         const FileType m_fileType;
+        // number of bits that file needs if it is stored somewhere
+        int m_fileBits = 0;
     };
 }

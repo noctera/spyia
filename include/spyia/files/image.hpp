@@ -7,21 +7,18 @@
 #include <opencv2/imgcodecs.hpp>
 #include <string>
 
-namespace Spyia::FileType
+namespace Spyia::File
 {
     class Image: public FileTypeBase
     {
         public:
-        Image(const std::string &imgPath, const Spyia::FileTypes &fileType);
+        Image(const std::string &imgPath, const FileType &fileType);
 
         const std::string &getBinaryContent() const override;
 
         private:
         cv::Mat m_image;
         std::string m_binaryContent;
-        // maximum number of image bits that can be manipulated
-        const int m_maxImgBits = 0;
-        // bits needed if you want to hide this image
-        const int m_neededBits = 0;
+
     };
 }

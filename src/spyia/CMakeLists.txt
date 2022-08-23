@@ -1,11 +1,13 @@
 add_library(spyia STATIC
     secretFile.cpp
+	outputStorage.cpp
 	files/fileTypeBase.cpp
 	files/image.cpp
 	encryption/aes.cpp
 	encryption/none.cpp
 	encryption/encryptionBase.cpp
 	steganography/stegAlgoBase.cpp
+	steganography/lsb/lsb.cpp
 )
 
 find_package( OpenCV REQUIRED )

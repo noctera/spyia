@@ -4,13 +4,15 @@
 
 #include <fstream>
 
-namespace Spyia::FileType
+namespace Spyia::File
 {
-    Image::Image(const std::string &imgPath, const Spyia::FileTypes &fileType)
-        : FileTypeBase(fileType), m_image(cv::imread(imgPath)), m_maxImgBits(m_image.rows * m_image.cols * m_image.channels()) {
+    Image::Image(const std::string &imgPath, const FileType &fileType)
+        : FileTypeBase(fileType), m_image(cv::imread(imgPath)) {
         if(m_image.empty()) {
             throw std::invalid_argument("Could not open image");
         }
+
+        m_fileBits = (m_image.rows * m_image.cols * m_image.channels()) * 8;
 
         std::ifstream ifs(imgPath, std::ios::binary);
         if(!ifs)
