@@ -11,6 +11,7 @@ const FileType& FileTypeBase::getFileType()
     return m_fileType;
 }
 
-int FileTypeBase::getFileBits() {
-    return m_fileBits;
+unsigned long FileTypeBase::getContentBitsCount() const
+{
+    return m_contentBitsCount;
 }

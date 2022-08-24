@@ -12,14 +12,14 @@ namespace Spyia::File
             throw std::invalid_argument("Could not open image");
         }
 
-        m_fileBits = (m_image.rows * m_image.cols * m_image.channels()) * 8;
-
         std::ifstream ifs(imgPath, std::ios::binary);
         if(!ifs)
         {
             throw std::invalid_argument("Could not open secret file");
         }
         m_binaryContent.assign((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+
+        m_contentBitsCount = m_binaryContent.length() * 8;
     }
 
     const std::string& Image::getBinaryContent() const

@@ -5,7 +5,7 @@
 
 using namespace Spyia::Steganography;
 
-Lsb::Lsb() : StegAlgoBase(StegType::LSB){}
+Lsb::Lsb() : StegAlgoBase(StegType::LSB, 8){}
 
 void Lsb::hide(cv::Mat img)
 {
