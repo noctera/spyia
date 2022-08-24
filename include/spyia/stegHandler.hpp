@@ -14,10 +14,10 @@ namespace Spyia
     {
       public:
         StegHandler(const SecretFile &sf, const OutputStorage &os);
-      private:
 
+        void hide();
+      private:
         const SecretFile &m_secretFile;
         const OutputStorage &m_outputStorage;
-
     };
 }
