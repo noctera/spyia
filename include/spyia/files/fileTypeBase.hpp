@@ -13,7 +13,8 @@ namespace Spyia::File {
         virtual const std::string& getBinaryContent() const {};
         unsigned long getContentBitsCount() const;
       protected:
-        const FileType m_fileType;
         unsigned long m_contentBitsCount = 0;
+      private:
+        const FileType m_fileType;
     };
 }
