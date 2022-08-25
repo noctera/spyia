@@ -2,8 +2,6 @@
 #include <spyia/files/fileType.hpp>
 #include <iostream>
 
-#include <fstream>
-
 namespace Spyia::File
 {
     Image::Image(const std::string &imgPath, const FileType &fileType)
@@ -12,18 +10,8 @@ namespace Spyia::File
             throw std::invalid_argument("Could not open image");
         }
 
-        std::ifstream ifs(imgPath, std::ios::binary);
-        if(!ifs)
-        {
-            throw std::invalid_argument("Could not open secret file");
-        }
-        m_binaryContent.assign((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-
-        m_contentBitsCount = m_binaryContent.length() * 8;
-    }
-
-    const std::string& Image::getBinaryContent() const
-    {
-        return m_binaryContent;
+        // check how many bits can be manipulated in general
+        // Image: RGB Channel -> 3 (255, 255, 255) -> (11111111, 11111111, 11111111) -> RGB Channel * 8
+        m_manipulableBitsCount = (m_image.rows * m_image.cols * m_image.channels()) * 8;
     }
 }

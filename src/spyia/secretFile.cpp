@@ -2,22 +2,30 @@
 #include <spyia/encryption/none.hpp>
 #include <spyia/encryption/encryptionType.hpp>
 #include <spyia/utils/conversions.hpp>
+#include <spyia/utils/fileOperations.hpp>
 
 #include <iostream>
+#include <fstream>
 
 using namespace Spyia;
 
-SecretFile::SecretFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Encryption::EncryptionBase> encryption)
-        : m_file(std::move(file)), m_encryption(std::move(encryption)) {}
+SecretFile::SecretFile(const std::string &filePath, File::FileType fileType)
+    : m_fileType(fileType), m_encryption(std::make_unique<Encryption::EncryptionBase>(Encryption::None()))
+{
+    m_content.assign(fileToBinary(filePath));
+}
 
-SecretFile::SecretFile(std::unique_ptr<File::FileTypeBase> file)
-        : m_file(std::move(file)), m_encryption(std::make_unique<Encryption::EncryptionBase>(Encryption::None())) {}
+SecretFile::SecretFile(const std::string &filePath, File::FileType fileType, std::unique_ptr<Encryption::EncryptionBase> encryption)
+        : m_fileType(fileType), m_encryption(std::move(encryption))
+{
+    m_content.assign(fileToBinary(filePath));
+}
 
 std::string SecretFile::getByteCode() const
 {
     // if no encryption is set, return blank content of file
     if(m_encryption->getEncryptionType() == Encryption::EncryptionType::NONE) {
-        return Conversion::textToBin(m_file->getBinaryContent());
+        return Conversion::textToBin(m_content);
     }
     // if m_encryptionContent is empty encrypt with .encrypt() first
     else if(m_encryption->getEncryptionType() != Encryption::EncryptionType::NONE && m_encryptedContent.empty()) {
@@ -30,9 +38,9 @@ std::string SecretFile::getByteCode() const
 
 }
 
-void SecretFile::setFile(std::unique_ptr<File::FileTypeBase> file)
+void SecretFile::setFile(const std::string &filePath)
 {
-    m_file = std::move(file);
+    m_content.assign(fileToBinary(filePath));
 }
 
 void SecretFile::setEncryption(std::unique_ptr<Encryption::EncryptionBase> encryption)
@@ -48,7 +56,7 @@ bool SecretFile::isEncrypted() const
 unsigned long SecretFile::getNeededBits() const
 {
     if(m_encryption->getEncryptionType() == Encryption::EncryptionType::NONE) {
-        return m_file->getContentBitsCount();
+        return m_content.length() * 8;
     }
     else {
         return m_encryptedContent.length() * 8;
@@ -56,5 +64,5 @@ unsigned long SecretFile::getNeededBits() const
 }
 
 void SecretFile::encrypt() {
-    m_encryptedContent = m_encryption->encryptContent(m_file->getBinaryContent());
+    m_encryptedContent = m_encryption->encryptContent(m_content);
 }

@@ -5,7 +5,7 @@ using namespace Spyia;
 void OutputStorage::addFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Steganography::StegAlgoBase> stegAlgo)
 {
     // calculate how many bits can be stored per file and steganography algorithm
-    unsigned long maxBits = file->getContentBitsCount() / stegAlgo->getBitStorageDivider();
+    int maxBits = file->getManipulableBitsCount() / stegAlgo->getBitStorageDivider();
     m_fileStorage.emplace_back(std::move(file), std::move(stegAlgo), maxBits);
 }
 

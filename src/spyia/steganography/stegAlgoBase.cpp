@@ -2,7 +2,7 @@
 
 using namespace Spyia::Steganography;
 
-StegAlgoBase::StegAlgoBase(StegType stegType, unsigned long bitStorageDivider)
+StegAlgoBase::StegAlgoBase(StegType stegType, int bitStorageDivider)
     : m_stegType(stegType), m_bitStorageDivider(bitStorageDivider) {}
 
 const StegType& StegAlgoBase::getStegAlgoType()
@@ -10,7 +10,7 @@ const StegType& StegAlgoBase::getStegAlgoType()
     return m_stegType;
 }
 
-unsigned long StegAlgoBase::getBitStorageDivider() const
+int StegAlgoBase::getBitStorageDivider() const
 {
     return m_bitStorageDivider;
 }

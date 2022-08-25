@@ -10,10 +10,9 @@ namespace Spyia::File {
         explicit FileTypeBase(FileType fileType);
 
         const FileType &getFileType();
-        virtual const std::string& getBinaryContent() const {};
-        unsigned long getContentBitsCount() const;
+        int getManipulableBitsCount() const;
       protected:
-        unsigned long m_contentBitsCount = 0;
+        int m_manipulableBitsCount = 0;
       private:
         const FileType m_fileType;
     };

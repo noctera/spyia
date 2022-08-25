@@ -4,6 +4,7 @@
 #include <memory>
 #include <spyia/encryption/encryptionBase.hpp>
 #include <spyia/files/fileTypeBase.hpp>
+#include <spyia/files/fileType.hpp>
 
 namespace Spyia
 {
@@ -11,12 +12,12 @@ namespace Spyia
     {
         public:
           SecretFile() = delete;
-          SecretFile(std::unique_ptr<File::FileTypeBase> file);
-          SecretFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Encryption::EncryptionBase> encryption);
+          SecretFile(const std::string &filePath, File::FileType fileType);
+          SecretFile(const std::string &filePath, File::FileType fileType, std::unique_ptr<Encryption::EncryptionBase> encryption);
 
           std::string getByteCode() const;
 
-          void setFile(std::unique_ptr<File::FileTypeBase> file);
+          void setFile(const std::string &filePath);
           void setEncryption(std::unique_ptr<Encryption::EncryptionBase> encryption);
 
           bool isEncrypted() const;
@@ -27,9 +28,10 @@ namespace Spyia
           void encrypt();
 
         private:
-          std::unique_ptr<File::FileTypeBase> m_file;
+          File::FileType m_fileType;
           std::unique_ptr<Encryption::EncryptionBase> m_encryption;
 
+          std::string m_content;
           std::string m_encryptedContent;
     };
 }

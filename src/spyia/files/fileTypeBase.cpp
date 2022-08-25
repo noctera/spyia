@@ -11,7 +11,6 @@ const FileType& FileTypeBase::getFileType()
     return m_fileType;
 }
 
-unsigned long FileTypeBase::getContentBitsCount() const
-{
-    return m_contentBitsCount;
+int FileTypeBase::getManipulableBitsCount() const {
+    return m_manipulableBitsCount;
 }

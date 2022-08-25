@@ -14,11 +14,7 @@ namespace Spyia::File
         public:
         Image(const std::string &imgPath, const FileType &fileType);
 
-        const std::string &getBinaryContent() const override;
-
         private:
         cv::Mat m_image;
-        std::string m_binaryContent;
-
     };
 }

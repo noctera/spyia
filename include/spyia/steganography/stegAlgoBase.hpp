@@ -10,11 +10,11 @@ namespace Spyia::Steganography
     class StegAlgoBase
     {
       public:
-        explicit StegAlgoBase(StegType stegType, unsigned long bitStorageDivider);
+        explicit StegAlgoBase(StegType stegType, int bitStorageDivider);
         const StegType &getStegAlgoType();
-        unsigned long getBitStorageDivider() const;
+        int getBitStorageDivider() const;
       private:
         StegType m_stegType;
-        unsigned long m_bitStorageDivider = 0;
+        int m_bitStorageDivider = 0;
     };
 }
