@@ -8,6 +8,7 @@
 #include <cryptopp/hex.h>
 
 using namespace Spyia::Encryption;
+using namespace CryptoPP;
 
 AesCbc::AesCbc(const std::string& key)
     : EncryptionBase(EncryptionType::AES_CBC)
@@ -16,6 +17,18 @@ AesCbc::AesCbc(const std::string& key)
         throw std::invalid_argument( "key must have a length of 16" );
     }
     m_key = key;
+
+    // generate iv and convert it to string
+    AutoSeededRandomPool prng;
+    SecByteBlock iv(AES::BLOCKSIZE);
+    prng.GenerateBlock(iv, iv.size());
+    std::string tempIv = std::string(reinterpret_cast<const char*>(iv.data()), iv.size());
+    StringSource ss1(
+        tempIv,
+        true,
+        new HexEncoder(new StringSink(m_iv)) // HexEncoder
+    ); // StringSource
+
 }
 
 AesCbc::AesCbc(const std::string& key, const std::string& iv)
@@ -39,7 +52,7 @@ const std::string& AesCbc::getIv()
 
 std::string AesCbc::encryptContent(const std::string &content)
 {
-    using namespace CryptoPP;
+
 
     AutoSeededRandomPool prng;
     HexEncoder encoder(new FileSink(std::cout));

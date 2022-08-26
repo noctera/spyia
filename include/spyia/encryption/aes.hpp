@@ -17,8 +17,8 @@ namespace Spyia::Encryption
         explicit AesCbc(const std::string& key);
         AesCbc(const std::string& key, const std::string& iv);
 
-        const std::string &getKey();
-        const std::string &getIv();
+        const std::string &getKey() override;
+        const std::string &getIv() override;
         std::string encryptContent(const std::string &content) override;
       private:
         std::string m_key;
