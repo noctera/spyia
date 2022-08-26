@@ -12,7 +12,7 @@ namespace Spyia::Steganography
     {
       public:
         Lsb();
-        std::string generateHeader(int position, int maxFiles, int maxStoredBits) const override;
+        std::string generateHeader(int position, int maxFiles) const override;
         void hide(cv::Mat img);
     };
 }

@@ -16,6 +16,7 @@ namespace Spyia
         StegHandler(SecretFile &sf, OutputStorage &os, std::unique_ptr<Encryption::EncryptionBase> encryption);
         StegHandler(SecretFile &sf, OutputStorage &os);
         void generateHeaders();
+        std::size_t getMaxStorableBits() const;
         void hide();
       private:
         const SecretFile &m_secretFile;

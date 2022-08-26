@@ -68,9 +68,9 @@ unsigned long SecretFile::getNeededBits() const
     }
 }
 
-Encryption::EncryptionType SecretFile::getEncryptionMode() const
+Encryption::EncryptionType SecretFile::getEncryptionAlgo() const
 {
-    // return mode used to encrypt SecretFile
+    // return algorithm used to encrypt SecretFile
     return m_encryption->getEncryptionType();
 }
 
@@ -81,7 +81,12 @@ std::string SecretFile::getEncryptionKey() const
 
 std::string SecretFile::getEncryptionIV() const
 {
-    return m_encryption->getIv();
+    if(hasUsedIV()) {
+        return m_encryption->getIv();
+    }
+    else {
+        return "x";
+    }
 }
 
 void SecretFile::encrypt() {

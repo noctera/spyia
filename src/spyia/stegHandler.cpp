@@ -20,16 +20,27 @@ void StegHandler::generateHeaders()
 {
     unsigned long bitsPerFile = m_secretFile.getNeededBits() / m_outputStorage.getOutputFileCount();
     // generate individual headers for files in outputStorage
-    std::vector<std::string> fileHeaders = m_outputStorage.getFileHeader(bitsPerFile);
+    std::vector<std::string> fileHeaders = m_outputStorage.getFileHeaders();
+
+    // push secret file encryption algorithm (and IV if available) to the front of the headers
     bool usedIV = m_secretFile.hasUsedIV();
     std::string iv;
     if(usedIV) {
         iv = m_secretFile.getEncryptionIV();
     }
+
+    // encrypt headers if header encryption method was set
+
+    // generate unencrypted header front and append encrypted header to it
     for(std::size_t i = 1; i <= m_outputStorage.getOutputFileCount(); ++i) {
         // std::string header = .generateHeader(i, m_outputStorage.getFileCount(); bitsPerFile);
         std::string fullHeader = "dfjdskfsj";// std::to_string(headers.size()) + "###";
     }
+}
+
+std::size_t StegHandler::getMaxStorableBits() const
+{
+
 }
 
 void StegHandler::hide()

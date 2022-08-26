@@ -7,5 +7,6 @@ None::None() : EncryptionBase(EncryptionType::NONE) {}
 
 std::string None::encryptContent(const std::string& content)
 {
-    throw std::invalid_argument("No encryption method set");
+    // if no encryption algorithm is set, return the content unencrypted
+    return content;
 }

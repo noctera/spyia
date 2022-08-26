@@ -25,7 +25,7 @@ namespace Spyia
 
           unsigned long getNeededBits() const;
 
-          Encryption::EncryptionType getEncryptionMode() const;
+          Encryption::EncryptionType getEncryptionAlgo() const;
           std::string getEncryptionKey() const;
           std::string getEncryptionIV() const;
 
