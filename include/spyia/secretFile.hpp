@@ -24,6 +24,8 @@ namespace Spyia
           bool hasUsedIV() const;
 
           unsigned long getNeededBits() const;
+
+          Encryption::EncryptionType getEncryptionMode() const;
           std::string getEncryptionKey() const;
           std::string getEncryptionIV() const;
 

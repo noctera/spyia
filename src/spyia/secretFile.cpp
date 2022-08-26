@@ -10,7 +10,7 @@
 using namespace Spyia;
 
 SecretFile::SecretFile(const std::string &filePath, File::FileType fileType)
-    : m_fileType(fileType), m_encryption(std::make_unique<Encryption::EncryptionBase>(Encryption::None()))
+    : m_fileType(fileType), m_encryption(std::make_unique<Encryption::None>(Encryption::None()))
 {
     m_content.assign(fileToBinary(filePath));
 }
@@ -66,6 +66,12 @@ unsigned long SecretFile::getNeededBits() const
     else {
         return m_encryptedContent.length() * 8;
     }
+}
+
+Encryption::EncryptionType SecretFile::getEncryptionMode() const
+{
+    // return mode used to encrypt SecretFile
+    return m_encryption->getEncryptionType();
 }
 
 std::string SecretFile::getEncryptionKey() const
