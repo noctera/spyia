@@ -1,9 +1,20 @@
 #include <spyia/stegHandler.hpp>
+#include <spyia/encryption/none.hpp>
 
 using namespace Spyia;
 
-StegHandler::StegHandler(const SecretFile &sf, const OutputStorage &os, std::unique_ptr<Encryption::EncryptionBase> encryption)
-    : m_secretFile(sf), m_outputStorage(os), m_encryption(std::move(encryption)) {}
+StegHandler::StegHandler(SecretFile &sf, OutputStorage &os, std::unique_ptr<Encryption::EncryptionBase> encryption)
+    : m_secretFile(sf), m_outputStorage(os), m_encryption(std::move(encryption))
+{
+    // add SecretFile encryption type to OutputStorage in order to generate headers
+    m_outputStorage.addSecretFileEncryptionMode(m_secretFile.getEncryptionMode());
+}
+
+StegHandler::StegHandler(SecretFile &sf, OutputStorage &os)
+    : m_secretFile(sf), m_outputStorage(os), m_encryption(std::make_unique<Encryption::None>(Encryption::None()))
+{
+    // add SecretFile encryption type to OutputStorage in order to generate headers
+}
 
 void StegHandler::generateHeaders()
 {
