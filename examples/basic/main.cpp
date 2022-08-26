@@ -5,36 +5,34 @@
 #include <spyia/steganography/stegType.hpp>
 #include <spyia/encryption/aes.hpp>
 #include <spyia/encryption/none.hpp>
-#include <spyia/outputStorage.hpp>
+#include <spyia/hideHandler.hpp>
 #include <spyia/steganography/lsb/lsb.hpp>
-#include <spyia/stegHandler.hpp>
+#include <spyia/utils/utils.hpp>
+#include <algorithm>
 
 using namespace Spyia;
 
 int main()
 {
-    // Spyia::Encryption::None encryption;
-    SecretFile secretFile("/home/julian/Desktop/logo192.png", File::FileType::PNG);
+    Encryption::AesCbc encryption("tjtjtjtjtjtjtjtj");
 
-    // std::cout << "1. needed bits: " << secretFile.getNeededBits() << std::endl;
+    SecretFile secretFile("/home/julian/Desktop/logo512.png", File::FileType::PNG);
 
-    secretFile.setEncryption(std::make_unique<Encryption::AesCbc>("tjtjtjtjtjtjtjtj"));
+    std::cout << "1. needed bits: " << secretFile.getNeededBits() << std::endl;
+
+    secretFile.setEncryption(std::make_unique<Encryption::AesCbc>(encryption));
 
     secretFile.encrypt();
     //std::cout << "Is encrypted: " << secretFile.isEncrypted() << std::endl;
     std::cout << "2. needed bits: " << secretFile.getNeededBits() << std::endl;
-    std::cout << secretFile.getByteCode().length() << std::endl;
 
-    OutputStorage outputStorage;
+    HideHandler hideHandler;
 
-    File::Image secretImage("/home/julian/Desktop/logo192.png", File::FileType::PNG);
+    File::Image secretImage("/run/media/julian/Volume/Bilder/Unbenannt.png", File::FileType::PNG);
 
     outputStorage.addFile(std::make_unique<File::Image>(secretImage), std::make_unique<Steganography::Lsb>());
     outputStorage.addFile(std::make_unique<File::Image>(secretImage), std::make_unique<Steganography::Lsb>());
 
-    StegHandler stegHandler(secretFile, outputStorage);
-
-    stegHandler.hide();
 
     std::cout << "test";
 }
