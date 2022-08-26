@@ -13,11 +13,13 @@ namespace Spyia
     class StegHandler
     {
       public:
-        StegHandler(const SecretFile &sf, const OutputStorage &os);
-
+        StegHandler(const SecretFile &sf, const OutputStorage &os, std::unique_ptr<Encryption::EncryptionBase> encryption);
+        void generateHeaders();
         void hide();
       private:
         const SecretFile &m_secretFile;
         const OutputStorage &m_outputStorage;
+        std::unique_ptr<Encryption::EncryptionBase> m_encryption;
+        std::vector<std::string> headers;
     };
 }

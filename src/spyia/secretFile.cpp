@@ -53,6 +53,11 @@ bool SecretFile::isEncrypted() const
     return m_encryption->getEncryptionType() != Encryption::EncryptionType::NONE;
 }
 
+bool SecretFile::hasUsedIV() const
+{
+    return m_encryption->getEncryptionType() == Encryption::EncryptionType::AES_CBC;
+}
+
 unsigned long SecretFile::getNeededBits() const
 {
     if(m_encryption->getEncryptionType() == Encryption::EncryptionType::NONE) {
@@ -61,6 +66,16 @@ unsigned long SecretFile::getNeededBits() const
     else {
         return m_encryptedContent.length() * 8;
     }
+}
+
+std::string SecretFile::getEncryptionKey() const
+{
+    return m_encryption->getKey();
+}
+
+std::string SecretFile::getEncryptionIV() const
+{
+    return m_encryption->getIv();
 }
 
 void SecretFile::encrypt() {

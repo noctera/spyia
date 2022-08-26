@@ -16,6 +16,7 @@ namespace Spyia
         void addFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Steganography::StegAlgoBase> stegAlgo);
         std::size_t getOutputFileCount() const;
         std::size_t getMaxStorableBits() const;
+        std::vector<std::string> getFileHeader(int maxStoredBits) const;
       private:
         // tuple <file, stegAlgo, how many bits you can store>
         std::vector<std::tuple<std::unique_ptr<File::FileTypeBase>, std::unique_ptr<Steganography::StegAlgoBase>, unsigned long>> m_fileStorage;

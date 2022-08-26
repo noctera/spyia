@@ -21,8 +21,11 @@ namespace Spyia
           void setEncryption(std::unique_ptr<Encryption::EncryptionBase> encryption);
 
           bool isEncrypted() const;
+          bool hasUsedIV() const;
 
           unsigned long getNeededBits() const;
+          std::string getEncryptionKey() const;
+          std::string getEncryptionIV() const;
 
           // encryption methods
           void encrypt();

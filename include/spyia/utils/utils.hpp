@@ -10,7 +10,7 @@
 #include <iterator>
 
 namespace Spyia {
-    std::vector<int> generateNumbersBySeedNew(const std::string &seed, int amount, int min, int max)
+    std::vector<int> generateNumbersBySeed(const std::string &seed, int amount, int min, int max)
     {
         std::vector<int> numbers;
         // TODO: Maybe add recursion in the future

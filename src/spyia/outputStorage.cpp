@@ -23,3 +23,12 @@ std::size_t OutputStorage::getMaxStorableBits() const
 
     return tempCount;
 }
+
+std::vector<std::string> OutputStorage::getFileHeader(int maxStoredBits) const
+{
+    std::vector<std::string> fileHeaders;
+    int fileAmount = m_fileStorage.size();
+    for(std::size_t i = 0; i < fileAmount; ++i) {
+        fileHeaders.emplace_back(std::get<1>(m_fileStorage[i])->generateHeader(i + 1, fileAmount, maxStoredBits));
+    }
+}
