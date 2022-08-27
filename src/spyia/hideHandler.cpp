@@ -1,5 +1,8 @@
 #include <spyia/hideHandler.hpp>
 #include <spyia/encryption/none.hpp>
+#include <spyia/utils/utils.hpp>
+
+#include <iostream>
 
 using namespace Spyia;
 
@@ -16,39 +19,46 @@ void HideHandler::addFile(std::unique_ptr<File::FileTypeBase> file, std::unique_
     m_fileStorage.emplace_back(std::move(file), std::move(stegAlgo), maxBits);
 }
 
-std::size_t HideHandler::getOutputFileCount() const
-{
-    return m_fileStorage.size();
-}
-
+// get individual headers from each output file which can be encrypted later
 std::vector<std::string> HideHandler::getFileHeaders() const
 {
     std::vector<std::string> fileHeaders;
     int fileAmount = m_fileStorage.size();
-    for(std::size_t i = 0; i < fileAmount; ++i) {
-        fileHeaders.emplace_back(std::get<1>(m_fileStorage[i])->generateHeader(i + 1, fileAmount));
+
+    // check if IV was used for file
+    std::string iv = "x";
+    if(m_secretFile.hasUsedIV()) {
+        iv = m_secretFile.getEncryptionIV();
     }
+
+
+    for(std::size_t i = 0; i < fileAmount; ++i) {
+        fileHeaders.emplace_back(std::get<1>(m_fileStorage[i])->generateHeader(i + 1, fileAmount, m_secretFile.getEncryptionAlgo(), iv));
+    }
+
+    return fileHeaders;
 }
 
 void HideHandler::generateHeaders()
 {
-    unsigned long bitsPerFile = m_secretFile.getNeededBits() / m_outputStorage.getOutputFileCount();
     // generate individual headers for files in outputStorage
-    std::vector<std::string> fileHeaders = m_outputStorage.getFileHeaders();
-
-    // push secret file encryption algorithm (and IV if available) to the front of the headers
-    bool usedIV = m_secretFile.hasUsedIV();
-    std::string iv;
-    if(usedIV) {
-        iv = m_secretFile.getEncryptionIV();
-    }
-
-    // encrypt headers if header encryption method was set
+    std::vector<std::string> fileHeaders = getFileHeaders();
 
     // generate unencrypted header front and append encrypted header to it
-    for(std::size_t i = 1; i <= m_outputStorage.getOutputFileCount(); ++i) {
-        // std::string header = .generateHeader(i, m_outputStorage.getFileCount(); bitsPerFile);
-        std::string fullHeader = "dfjdskfsj";// std::to_string(headers.size()) + "###";
+    for(std::size_t i = 0; i < m_fileStorage.size(); ++i) {
+        // check if IV was used for file
+        std::string iv = "x";
+        if(m_headerEncryption->hasIv()) {
+            iv = m_headerEncryption->getIv();
+        }
+
+        // encrypt headers if header encryption method was set
+        std::string header = fileHeaders[i];
+        if(m_headerEncryption->getEncryptionType() != Encryption::EncryptionType::NONE) {
+            header = m_headerEncryption->encryptContent(fileHeaders[i]);
+        }
+        std::string fullHeader = std::to_string(header.length()) + "-" + encryptionToString(m_headerEncryption->getEncryptionType()) + ":" + iv + "###" + header;
+        headers.emplace_back(fullHeader);
     }
 }
 

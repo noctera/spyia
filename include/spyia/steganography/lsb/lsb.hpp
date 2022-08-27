@@ -5,6 +5,7 @@
 #include <opencv2/imgcodecs.hpp>
 
 #include <spyia/steganography/stegAlgoBase.hpp>
+#include <spyia/encryption/encryptionType.hpp>
 
 namespace Spyia::Steganography
 {
@@ -12,7 +13,7 @@ namespace Spyia::Steganography
     {
       public:
         Lsb();
-        std::string generateHeader(int position, int maxFiles) const override;
+        std::string generateHeader(int position, int maxFiles, Spyia::Encryption::EncryptionType encryptionType, const std::string &iv) const override;
         void hide(cv::Mat img);
     };
 }

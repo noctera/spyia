@@ -10,6 +10,7 @@ namespace Spyia::Encryption
     {
       public:
         None();
+        bool hasIv() override;
         std::string encryptContent(const std::string &content) override;
     };
 }

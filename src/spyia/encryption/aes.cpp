@@ -50,6 +50,11 @@ const std::string& AesCbc::getIv()
     return m_iv;
 }
 
+bool AesCbc::hasIv()
+{
+    return getEncryptionType() == Encryption::EncryptionType::AES_CBC;
+}
+
 std::string AesCbc::encryptContent(const std::string &content)
 {
 

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
 #include <cstdlib>
 #include <iostream>
@@ -10,7 +12,7 @@
 #include <iterator>
 
 namespace Spyia {
-    std::vector<int> generateNumbersBySeed(const std::string &seed, int amount, int min, int max)
+    inline std::vector<int> generateNumbersBySeed(const std::string &seed, int amount, int min, int max)
     {
         std::vector<int> numbers;
         // TODO: Maybe add recursion in the future
@@ -36,4 +38,13 @@ namespace Spyia {
         }
         return numbers;
     }
+
+    inline std::string encryptionToString(Encryption::EncryptionType encryptionType) {
+        switch(encryptionType) {
+            case Encryption::EncryptionType::AES_CBC: return "AESCBC";
+            case Encryption::EncryptionType::NONE: return "NONE";
+        }
+    }
 }
+
+# endif

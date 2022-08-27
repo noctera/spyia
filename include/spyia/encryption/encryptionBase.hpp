@@ -16,6 +16,7 @@ namespace Spyia::Encryption
         virtual std::string encryptContent(const std::string &content) {};
         virtual const std::string &getKey(){};
         virtual const std::string &getIv() {};
+        virtual bool hasIv() {};
       private:
         EncryptionType m_encryptionType;
 

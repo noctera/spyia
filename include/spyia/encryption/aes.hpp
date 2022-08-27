@@ -19,6 +19,7 @@ namespace Spyia::Encryption
 
         const std::string &getKey() override;
         const std::string &getIv() override;
+        bool hasIv() override;
         std::string encryptContent(const std::string &content) override;
       private:
         std::string m_key;

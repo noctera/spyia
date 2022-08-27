@@ -20,18 +20,20 @@ int main()
 
     std::cout << "1. needed bits: " << secretFile.getNeededBits() << std::endl;
 
-    secretFile.setEncryption(std::make_unique<Encryption::AesCbc>(encryption));
+    // secretFile.setEncryption(std::make_unique<Encryption::AesCbc>(encryption));
 
-    secretFile.encrypt();
+    // secretFile.encrypt();
     //std::cout << "Is encrypted: " << secretFile.isEncrypted() << std::endl;
     std::cout << "2. needed bits: " << secretFile.getNeededBits() << std::endl;
 
-    HideHandler hideHandler;
+    HideHandler hideHandler(secretFile);
 
     File::Image secretImage("/run/media/julian/Volume/Bilder/Unbenannt.png", File::FileType::PNG);
 
-    outputStorage.addFile(std::make_unique<File::Image>(secretImage), std::make_unique<Steganography::Lsb>());
-    outputStorage.addFile(std::make_unique<File::Image>(secretImage), std::make_unique<Steganography::Lsb>());
+    hideHandler.addFile(std::make_unique<File::Image>(secretImage), std::make_unique<Steganography::Lsb>());
+    hideHandler.addFile(std::make_unique<File::Image>(secretImage), std::make_unique<Steganography::Lsb>());
+
+    hideHandler.generateHeaders();
 
 
     std::cout << "test";

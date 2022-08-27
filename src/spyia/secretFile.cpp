@@ -55,7 +55,7 @@ bool SecretFile::isEncrypted() const
 
 bool SecretFile::hasUsedIV() const
 {
-    return m_encryption->getEncryptionType() == Encryption::EncryptionType::AES_CBC;
+    return m_encryption->hasIv();
 }
 
 unsigned long SecretFile::getNeededBits() const
