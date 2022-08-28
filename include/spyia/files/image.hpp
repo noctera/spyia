@@ -14,6 +14,8 @@ namespace Spyia::File
         public:
         Image(const std::string &imgPath, const FileType &fileType);
 
+        void hideHeader(std::string header, std::vector<int> positions) override;
+
         private:
         cv::Mat m_image;
     };

@@ -6,14 +6,22 @@
 
 using namespace Spyia;
 
-HideHandler::HideHandler(SecretFile& sf, std::unique_ptr<Encryption::EncryptionBase> encryption)
-    : m_secretFile(sf), m_headerEncryption(std::move(encryption)) {}
+HideHandler::HideHandler(const std::string &outputPath, SecretFile& sf, std::unique_ptr<Encryption::EncryptionBase> encryption)
+    : m_outputPath(outputPath), m_secretFile(sf), m_headerEncryption(std::move(encryption))
+{
+    if(m_headerEncryption->getEncryptionType() == Encryption::EncryptionType::NONE) {
+        throw std::invalid_argument("header has to be encrypted");
+    }
+}
 
 void HideHandler::addFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Steganography::StegAlgoBase> stegAlgo)
 {
     // calculate how many bits can be stored per file and steganography algorithm
     int maxBits = file->getManipulableBitsCount() / stegAlgo->getBitStorageDivider();
     m_fileStorage.emplace_back(std::move(file), std::move(stegAlgo), maxBits);
+
+    // regenerate all headers
+    generateHeaders();
 }
 
 // get individual headers from each output file which can be encrypted later
@@ -39,6 +47,7 @@ std::vector<std::string> HideHandler::getFileHeaders() const
 void HideHandler::generateHeaders()
 {
     // generate individual headers for files in outputStorage
+    std::vector<std::string> tempFullHeaders;
     std::vector<std::string> fileHeaders = getFileHeaders();
 
     // generate unencrypted header front and append encrypted header to it
@@ -51,20 +60,43 @@ void HideHandler::generateHeaders()
 
         // encrypt headers if header encryption method was set
         std::string header = fileHeaders[i];
-        if(m_headerEncryption->getEncryptionType() != Encryption::EncryptionType::NONE) {
-            header = m_headerEncryption->encryptContent(fileHeaders[i]);
-        }
+        header = m_headerEncryption->encryptContent(fileHeaders[i]);
         std::string fullHeader = std::to_string(header.length()) + "-" + encryptionTypeToString(m_headerEncryption->getEncryptionType()) + ":" + iv + "###" + header;
-        headers.emplace_back(fullHeader);
+        tempFullHeaders.emplace_back(fullHeader);
     }
+    m_headers = tempFullHeaders;
 }
 
-std::size_t HideHandler::getMaxStorableBits() const
+unsigned long HideHandler::getMaxStorableBits() const
 {
+    unsigned long storableBits = 0;
+    for(std::size_t i = 0; i < m_fileStorage.size(); ++i) {
+        // subtract bits needed by header
+        storableBits += (std::get<2>(m_fileStorage[i]) - m_headers[i].length() * 8);
+    }
+    return storableBits;
+}
 
+unsigned long HideHandler::getMaxStorableBitsForFile(std::size_t index) const
+{
+    return std::get<2>(m_fileStorage[index]) - m_headers[index].length() * 8;
 }
 
 void HideHandler::hide()
 {
+    // divide SecretFile into n parts
+    divideString(m_secretFile.getByteCode(), m_fileStorage.size());
+
+    for(std::size_t i = 0; i < m_fileStorage.size(); ++i) {
+        // generate header positions
+        std::vector<int> headerPositions = generateNumbersBySeed(m_headerEncryption->getKey(), m_headers[i].length() * 8, 0, getMaxStorableBitsForFile(i));
+
+        // hide header
+        std::get<0>(m_fileStorage[i])->hideHeader(m_headers[i], headerPositions);
+
+        // hide SecretFile part in file while watching out for the reserved bits of header
+
+    }
+
 
 }

@@ -21,7 +21,7 @@ namespace Spyia {
         for (std::size_t i = 0; i < amount; ++i)
         {
             // add the index at every cycle to generate a new number, otherwise it would always return the same number
-            std::default_random_engine e1(std::hash<std::string>{}(seed + char(i)));
+            std::default_random_engine e1(std::hash<std::string>{}(seed + std::to_string(i)));
 
             // generate random number located in given span
             int randomNumber = uniform_dist(e1);
@@ -31,12 +31,33 @@ namespace Spyia {
                 // without changing the amount of numbers returned
                 ++i;
                 ++amount;
-                e1 = std::default_random_engine (std::hash<std::string>{}(seed + char(i)));
+                e1 = std::default_random_engine (std::hash<std::string>{}(seed + std::to_string(i)));
                 randomNumber = uniform_dist(e1);
             }
             numbers.push_back(randomNumber);
         }
         return numbers;
+    }
+
+    inline std::vector<std::string> divideString(std::string input, int n)
+    {
+        std::vector<std::string> stringParts;
+        int stringSize = input.size() / n;
+        int nextStringPart = stringSize;
+
+        for(std::size_t i = 0; i < n; ++i) {
+            if(i == 0) {
+                stringParts.emplace_back(input.substr(0,nextStringPart - 1));
+            }
+            else if(i + 1 == n) {
+                stringParts.emplace_back(input.substr(nextStringPart,input.size()));
+            }
+            else {
+                stringParts.emplace_back(input.substr(nextStringPart,nextStringPart + stringSize - 1));
+                nextStringPart += stringSize;
+            }
+        }
+        return stringParts;
     }
 
     inline std::string encryptionTypeToString(Encryption::EncryptionType encryptionType)
