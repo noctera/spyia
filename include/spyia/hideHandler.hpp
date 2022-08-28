@@ -15,7 +15,7 @@ namespace Spyia
     {
       public:
         HideHandler(SecretFile &sf, std::unique_ptr<Encryption::EncryptionBase> encryption);
-        HideHandler(SecretFile &sf);
+
         void addFile(std::unique_ptr<File::FileTypeBase> file, std::unique_ptr<Steganography::StegAlgoBase> stegAlgo);
 
         std::size_t getMaxStorableBits() const;

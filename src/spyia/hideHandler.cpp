@@ -6,9 +6,6 @@
 
 using namespace Spyia;
 
-HideHandler::HideHandler(SecretFile &sf)
-    : m_secretFile(sf), m_headerEncryption(std::make_unique<Encryption::None>(Encryption::None())) {}
-
 HideHandler::HideHandler(SecretFile& sf, std::unique_ptr<Encryption::EncryptionBase> encryption)
     : m_secretFile(sf), m_headerEncryption(std::move(encryption)) {}
 
