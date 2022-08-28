@@ -21,6 +21,11 @@ SecretFile::SecretFile(const std::string &filePath, File::FileType fileType, std
     m_content.assign(fileToBinary(filePath));
 }
 
+const File::FileType& SecretFile::getFileType() const
+{
+    return m_fileType;
+}
+
 std::string SecretFile::getByteCode() const
 {
     // if no encryption is set, return blank content of file

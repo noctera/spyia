@@ -33,7 +33,7 @@ std::vector<std::string> HideHandler::getFileHeaders() const
 
 
     for(std::size_t i = 0; i < fileAmount; ++i) {
-        fileHeaders.emplace_back(std::get<1>(m_fileStorage[i])->generateHeader(i + 1, fileAmount, m_secretFile.getEncryptionAlgo(), iv));
+        fileHeaders.emplace_back(std::get<1>(m_fileStorage[i])->generateHeader(i + 1, fileAmount, m_secretFile.getFileType(), m_secretFile.getEncryptionAlgo(), iv));
     }
 
     return fileHeaders;
@@ -57,7 +57,7 @@ void HideHandler::generateHeaders()
         if(m_headerEncryption->getEncryptionType() != Encryption::EncryptionType::NONE) {
             header = m_headerEncryption->encryptContent(fileHeaders[i]);
         }
-        std::string fullHeader = std::to_string(header.length()) + "-" + encryptionToString(m_headerEncryption->getEncryptionType()) + ":" + iv + "###" + header;
+        std::string fullHeader = std::to_string(header.length()) + "-" + encryptionTypeToString(m_headerEncryption->getEncryptionType()) + ":" + iv + "###" + header;
         headers.emplace_back(fullHeader);
     }
 }

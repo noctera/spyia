@@ -15,6 +15,7 @@ namespace Spyia
           SecretFile(const std::string &filePath, File::FileType fileType);
           SecretFile(const std::string &filePath, File::FileType fileType, std::unique_ptr<Encryption::EncryptionBase> encryption);
 
+          const File::FileType &getFileType() const;
           std::string getByteCode() const;
 
           void setFile(const std::string &filePath);
