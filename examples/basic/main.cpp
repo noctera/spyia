@@ -28,7 +28,7 @@ int main()
 
     HideHandler hideHandler("/home/julian/Desktop/test", secretFile, std::make_unique<Encryption::AesCbc>(encryption));
 
-    File::Image outputImage1("/run/media/julian/Volume/Bilder/Unbenannt.png", File::FileType::PNG);
+    File::Image outputImage1("/home/julian/Desktop/logo512.png", File::FileType::PNG);
     File::Image outputImage2("/run/media/julian/Volume/Bilder/test.png", File::FileType::PNG);
 
     hideHandler.addFile(std::make_unique<File::Image>(outputImage1), std::make_unique<Steganography::Lsb>());

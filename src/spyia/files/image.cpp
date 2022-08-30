@@ -18,20 +18,12 @@ namespace Spyia::File
 
     void Image::manipulate(int position, int bitPosition, char value)
     {
-        int tempPosition = 0;
-        for (int i = 0; i < m_image.rows; i++) {
-            // if number of needed pixels is reached stop iterating
-            for (int j = 0; j < m_image.cols; j++) {
-                // fetch RGB values of pixel
-                cv::Vec3b& intensity = m_image.at<cv::Vec3b>(i, j);
-                for (int k = 0; k < m_image.channels(); k++) {
-                    if(tempPosition == position)
-                    {
-                        manipulateByte(intensity.val[k], bitPosition, value);
-                    }
-                    ++tempPosition;
-                }
-            }
-        }
+        // calculate position in image (took me way too much time)
+        int col = position / (m_image.rows * 3);
+        int row = (position % (m_image.rows * 3)) / 3;
+        int channel = position % 3;
+
+        auto& intensity = m_image.at<cv::Vec3b>(col, row);
+        manipulateByte(intensity.val[channel], bitPosition, value);
     }
 }

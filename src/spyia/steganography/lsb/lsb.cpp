@@ -28,7 +28,6 @@ void Lsb::hideSecret(File::FileTypeBase& file, const std::string& secret, const 
     std::size_t secretPosition = 0;
 
    for(std::size_t i = 0; i < maximum; ++i) {
-       std::cout << i << "/" << maximum << std::endl;
        if(std::find(reservedBits.begin(), reservedBits.end(), i) != reservedBits.end()) {
            // if position is already reserved by header skip it
            ++maximum;
