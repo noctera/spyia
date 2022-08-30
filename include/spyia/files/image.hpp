@@ -14,10 +14,8 @@ namespace Spyia::File
         public:
         Image(const std::string &imgPath, const FileType &fileType);
 
-        cv::Mat getFileObject() {
-            std::cout << "called" << '\n';
-            return m_image;
-        }
+        void manipulate(int position, int bitPosition, char value) override;
+
         private:
         cv::Mat m_image;
     };

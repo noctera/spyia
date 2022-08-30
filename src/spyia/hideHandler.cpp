@@ -92,11 +92,7 @@ void HideHandler::hide()
         std::vector<int> headerPositions = generateNumbersBySeed(m_headerEncryption->getKey(), m_headers[i].length() * 8, 0, getMaxStorableBitsForFile(i));
 
         // hide header
-        std::get<1>(m_fileStorage[i])->hideHeader(std::get<0>(m_fileStorage[i])->getFileObject(), m_headers[i], headerPositions);
-
-        // hide SecretFile part in file while watching out for the reserved bits of header
+        std::get<1>(m_fileStorage[i])->hideHeader(*(std::get<0>(m_fileStorage[i])), m_headers[i], headerPositions);
 
     }
-
-
 }

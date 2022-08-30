@@ -7,6 +7,7 @@
 #include <spyia/steganography/stegType.hpp>
 #include <spyia/encryption/encryptionType.hpp>
 #include <spyia/files/fileType.hpp>
+#include <spyia/files/fileTypeBase.hpp>
 
 namespace Spyia::Steganography
 {
@@ -19,9 +20,9 @@ namespace Spyia::Steganography
         virtual std::string generateHeader(int position, int maxFiles, File::FileType fileType, Encryption::EncryptionType encryptionType, const std::string &iv) const {};
 
         // hide header
-        virtual void hideHeader(cv::Mat &img, const std::string &header, const std::vector<int> &positions) {};
+        virtual void hideHeader(File::FileTypeBase& file, const std::string &header, const std::vector<int> &positions) {};
         // hide information
-        virtual void hide(const cv::Mat &img) {};
+        virtual void hide(File::FileTypeBase& file) {};
       private:
         StegType m_stegType;
         int m_bitStorageDivider = 0;

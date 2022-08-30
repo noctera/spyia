@@ -108,11 +108,11 @@ namespace Spyia {
         return std::bitset<8>(input).to_ulong();
     }
 
-    inline void manipulateBit(unsigned char& pixel, const char& bit) {
+    inline void manipulateByte(unsigned char& pixel, int bitPosition, const char& bit) {
         std::string binConvertedValue = decToBin(pixel);
 
         // manipulate last bit of binary number
-        binConvertedValue[7] = bit;
+        binConvertedValue[bitPosition] = bit;
 
         // change out color value
         pixel = binToDec(binConvertedValue);

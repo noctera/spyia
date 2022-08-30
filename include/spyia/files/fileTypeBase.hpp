@@ -14,7 +14,7 @@ namespace Spyia::File {
         const FileType &getFileType();
         int getManipulableBitsCount() const;
 
-        void getFileObject() {};
+        virtual void manipulate(int position, int bitPosition, char value) {};
 
       protected:
         int m_manipulableBitsCount = 0;
