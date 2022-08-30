@@ -18,11 +18,25 @@ std::string Lsb::generateHeader(int position, int maxFiles, File::FileType fileT
 void Lsb::hideHeader(File::FileTypeBase& file, const std::string &header, const std::vector<int> &positions)
 {
     for(std::size_t i = 0; i < positions.size(); ++i) {
-        file.manipulate(positions[i], 7, header[i]);
+        file.manipulate(positions.at(i), 7, header.at(i));
     }
 }
 
-void Lsb::hide(File::FileTypeBase& file)
+void Lsb::hideSecret(File::FileTypeBase& file, const std::string& secret, const std::vector<int> &reservedBits)
 {
-    std::cout << "hide image" << std::endl;
+    std::size_t maximum = secret.length();
+    std::size_t secretPosition = 0;
+
+   for(std::size_t i = 0; i < maximum; ++i) {
+       std::cout << i << "/" << maximum << std::endl;
+       if(std::find(reservedBits.begin(), reservedBits.end(), i) != reservedBits.end()) {
+           // if position is already reserved by header skip it
+           ++maximum;
+       }
+       else {
+           // if not manipulate it
+           file.manipulate(i, 7, secret.at(secretPosition));
+           ++secretPosition;
+       }
+   }
 }

@@ -19,6 +19,6 @@ namespace Spyia::Steganography
 
         void hideHeader(File::FileTypeBase& file, const std::string &header, const std::vector<int> &positions) override;
 
-        void hide(File::FileTypeBase& file) override;
+        void hideSecret(File::FileTypeBase& file, const std::string& secret, const std::vector<int> &reservedBits) override;
     };
 }

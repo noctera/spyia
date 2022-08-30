@@ -38,7 +38,7 @@ std::vector<std::string> HideHandler::getFileHeaders() const
 
 
     for(std::size_t i = 0; i < fileAmount; ++i) {
-        fileHeaders.emplace_back(std::get<1>(m_fileStorage[i])->generateHeader(i + 1, fileAmount, m_secretFile.getFileType(), m_secretFile.getEncryptionAlgo(), iv));
+        fileHeaders.emplace_back(std::get<1>(m_fileStorage.at(i))->generateHeader(i + 1, fileAmount, m_secretFile.getFileType(), m_secretFile.getEncryptionAlgo(), iv));
     }
 
     return fileHeaders;
@@ -59,8 +59,8 @@ void HideHandler::generateHeaders()
         }
 
         // encrypt headers if header encryption method was set
-        std::string header = fileHeaders[i];
-        header = m_headerEncryption->encryptContent(fileHeaders[i]);
+        std::string header = fileHeaders.at(i);
+        header = m_headerEncryption->encryptContent(fileHeaders.at(i));
         std::string fullHeader = std::to_string(header.length()) + "-" + encryptionTypeToString(m_headerEncryption->getEncryptionType()) + ":" + iv + "###" + header;
         tempFullHeaders.emplace_back(fullHeader);
     }
@@ -72,27 +72,30 @@ unsigned long HideHandler::getMaxStorableBits() const
     unsigned long storableBits = 0;
     for(std::size_t i = 0; i < m_fileStorage.size(); ++i) {
         // subtract bits needed by header
-        storableBits += (std::get<2>(m_fileStorage[i]) - m_headers[i].length() * 8);
+        storableBits += (std::get<2>(m_fileStorage.at(i)) - m_headers.at(i).length() * 8);
     }
     return storableBits;
 }
 
 unsigned long HideHandler::getMaxStorableBitsForFile(std::size_t index) const
 {
-    return std::get<2>(m_fileStorage[index]) - m_headers[index].length() * 8;
+    return std::get<2>(m_fileStorage.at(index)) - m_headers.at(index).length() * 8;
 }
 
 void HideHandler::hide()
 {
     // divide SecretFile into n parts
-    divideString(m_secretFile.getByteCode(), m_fileStorage.size());
+    std::vector<std::string> secretParts = divideString(m_secretFile.getByteCode(), m_fileStorage.size());
 
     for(std::size_t i = 0; i < m_fileStorage.size(); ++i) {
+        std::cout << "File "  << i << std::endl;
         // generate header positions
-        std::vector<int> headerPositions = generateNumbersBySeed(m_headerEncryption->getKey(), m_headers[i].length() * 8, 0, getMaxStorableBitsForFile(i));
-
+        std::vector<int> headerPositions = generateNumbersBySeed(m_headerEncryption->getKey(), m_headers.at(i).length() * 8, 0, getMaxStorableBitsForFile(i));
         // hide header
-        std::get<1>(m_fileStorage[i])->hideHeader(*(std::get<0>(m_fileStorage[i])), m_headers[i], headerPositions);
+        // std::get<1>(m_fileStorage.at(i))->hideHeader(*(std::get<0>(m_fileStorage.at(i))), m_headers.at(i), headerPositions);
 
+        // hide secret file while taking care of the reserved bits
+        std::get<1>(m_fileStorage.at(i))->hideSecret(*(std::get<0>(m_fileStorage.at(i))), secretParts.at(i), headerPositions);
     }
+    std::cout << "finished" << std::endl;
 }

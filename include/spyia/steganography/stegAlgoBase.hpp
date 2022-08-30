@@ -22,7 +22,7 @@ namespace Spyia::Steganography
         // hide header
         virtual void hideHeader(File::FileTypeBase& file, const std::string &header, const std::vector<int> &positions) {};
         // hide information
-        virtual void hide(File::FileTypeBase& file) {};
+        virtual void hideSecret(File::FileTypeBase& file, const std::string& secret, const std::vector<int> &reservedBits) {};
       private:
         StegType m_stegType;
         int m_bitStorageDivider = 0;
