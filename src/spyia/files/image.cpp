@@ -1,5 +1,6 @@
 #include <spyia/files/image.hpp>
 #include <spyia/files/fileType.hpp>
+#include <spyia/utils/utils.hpp>
 #include <iostream>
 
 namespace Spyia::File
@@ -13,10 +14,5 @@ namespace Spyia::File
         // check how many bits can be manipulated in general
         // Image: RGB Channel -> 3 (255, 255, 255) -> (11111111, 11111111, 11111111) -> RGB Channel * 8
         m_manipulableBitsCount = (m_image.rows * m_image.cols * m_image.channels()) * 8;
-    }
-
-    void Image::hideHeader(std::string header, std::vector<int> positions)
-    {
-        // hide header in image
     }
 }

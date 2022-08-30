@@ -10,6 +10,9 @@
 #include <algorithm>
 #include <random>
 #include <iterator>
+#include <bitset>
+
+#include <spyia/encryption/encryptionType.hpp>
 
 namespace Spyia {
     inline std::vector<int> generateNumbersBySeed(const std::string &seed, int amount, int min, int max)
@@ -95,6 +98,24 @@ namespace Spyia {
             case File::FileType::ODP: return "ODP"; break;
             case File::FileType::KEY: return "KEY"; break;
         }
+    }
+
+    inline std::string decToBin(const int& input) {
+        return std::bitset<8>(input).to_string();
+    }
+
+    inline unsigned char binToDec(const std::string& input) {
+        return std::bitset<8>(input).to_ulong();
+    }
+
+    inline void manipulateBit(unsigned char& pixel, const char& bit) {
+        std::string binConvertedValue = decToBin(pixel);
+
+        // manipulate last bit of binary number
+        binConvertedValue[7] = bit;
+
+        // change out color value
+        pixel = binToDec(binConvertedValue);
     }
 }
 
