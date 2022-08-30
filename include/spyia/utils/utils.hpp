@@ -17,6 +17,7 @@
 namespace Spyia {
     inline std::vector<int> generateNumbersBySeed(const std::string &seed, int amount, int min, int max)
     {
+        std::cout << "Amount: " << amount << std::endl;
         std::vector<int> numbers;
         // TODO: Maybe add recursion in the future
 
@@ -28,16 +29,15 @@ namespace Spyia {
 
             // generate random number located in given span
             int randomNumber = uniform_dist(e1);
-            while (std::find(numbers.begin(), numbers.end(), randomNumber) != numbers.end())
+            if(std::find(numbers.begin(), numbers.end(), randomNumber) != numbers.end())
             {
                 // if number already got generated, increase index and max number to generate a new number with new seed
                 // without changing the amount of numbers returned
-                ++i;
                 ++amount;
-                e1 = std::default_random_engine (std::hash<std::string>{}(seed + std::to_string(i)));
-                randomNumber = uniform_dist(e1);
             }
-            numbers.push_back(randomNumber);
+            else {
+                numbers.push_back(randomNumber);
+            }
         }
         return numbers;
     }
