@@ -1,6 +1,7 @@
 #include <spyia/hideHandler.hpp>
 #include <spyia/encryption/none.hpp>
 #include <spyia/utils/utils.hpp>
+#include <spyia/utils/conversions.hpp>
 
 #include <iostream>
 
@@ -62,7 +63,7 @@ void HideHandler::generateHeaders()
         std::string header = fileHeaders.at(i);
         header = m_headerEncryption->encryptContent(fileHeaders.at(i));
         std::string fullHeader = std::to_string(header.length()) + "-" + encryptionTypeToString(m_headerEncryption->getEncryptionType()) + ":" + iv + "###" + header;
-        tempFullHeaders.emplace_back(fullHeader);
+        tempFullHeaders.emplace_back(Conversion::textToBin(fullHeader));
     }
     m_headers = tempFullHeaders;
 }
@@ -91,7 +92,7 @@ void HideHandler::hide()
         std::cout << "File "  << i << std::endl;
 
         // generate header positions
-        std::vector<int> headerPositions = generateNumbersBySeed(m_headerEncryption->getKey(), m_headers.at(i).length() * 8, 0, getMaxStorableBitsForFile(i));
+        std::vector<int> headerPositions = generateNumbersBySeed(m_headerEncryption->getKey(), m_headers.at(i).length(), 0, getMaxStorableBitsForFile(i));
 
         // hide header
         std::get<1>(m_fileStorage.at(i))->hideHeader(*(std::get<0>(m_fileStorage.at(i))), m_headers.at(i), headerPositions);
