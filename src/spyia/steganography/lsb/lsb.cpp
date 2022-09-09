@@ -9,10 +9,10 @@ using namespace Spyia::Steganography;
 
 Lsb::Lsb() : StegAlgoBase(StegType::LSB, 8){}
 
-std::string Lsb::generateHeader(int position, int maxFiles, File::FileType fileType, Spyia::Encryption::EncryptionType encryptionType, const std::string &iv) const
+std::string Lsb::generateHeader(int position, int maxFiles, int storedBits, File::FileType fileType, Spyia::Encryption::EncryptionType encryptionType, const std::string &iv) const
 {
-    // header example: f:1/3-AESCBC:iv-LSB
-    return "f:" + std::to_string(position) + "/" + std::to_string(maxFiles) + "-" + fileTypeToString(fileType) + "-" + encryptionTypeToString(encryptionType) + ":" + iv + "-LSB";
+    // header example: f:1/3-AESCBC:iv-LSB-bits
+    return "f:" + std::to_string(position) + "/" + std::to_string(maxFiles) + "-" + fileTypeToString(fileType) + "-" + encryptionTypeToString(encryptionType) + ":" + iv + "-LSB-" + std::to_string(storedBits);
 }
 
 void Lsb::hideHeader(File::FileTypeBase& file, const std::string &header, const std::vector<int> &positions)

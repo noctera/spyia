@@ -17,7 +17,7 @@ namespace Spyia::Steganography
         explicit StegAlgoBase(StegType stegType, int bitStorageDivider);
         const StegType &getStegAlgoType();
         int getBitStorageDivider() const;
-        virtual std::string generateHeader(int position, int maxFiles, File::FileType fileType, Encryption::EncryptionType encryptionType, const std::string &iv) const {};
+        virtual std::string generateHeader(int position, int maxFiles, int storedBits, File::FileType fileType, Encryption::EncryptionType encryptionType, const std::string &iv) const {};
 
         // hide header
         virtual void hideHeader(File::FileTypeBase& file, const std::string &header, const std::vector<int> &positions) {};

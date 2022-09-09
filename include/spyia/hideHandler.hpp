@@ -24,7 +24,7 @@ namespace Spyia
         void hide();
       private:
         std::vector<std::string> getFileHeaders() const;
-        void generateHeaders();
+        void generateFullHeaders();
 
         std::string m_outputPath;
         const SecretFile &m_secretFile;

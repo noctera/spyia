@@ -37,6 +37,5 @@ int main()
 
     std::cout << "Max Storable Bits: " << hideHandler.getMaxStorableBits() << '\n';
     std::cout << "Max Storable Bits: " << hideHandler.getMaxStorableBitsForFile(0) << '\n';
-
     hideHandler.hide();
 }
